@@ -1,30 +1,13 @@
+<script setup>
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
+import HelloWorld from './components/HelloWorld.vue'
+</script>
+
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + Vite" />
 </template>
-
-<script>
-import tabletop from "tabletop";
-
-export default {
-  methods: {
-    init() {
-      tabletop
-        .init({
-          key: "https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit?usp=sharing",
-          simpleSheet: true,
-        })
-        // eslint-disable-next-line no-unused-vars
-        .then(function (data, tabletop) {
-          console.log(data);
-        });
-    },
-  },
-  mounted: function () {
-    window.addEventListener("DOMContentLoaded", this.init);
-  },
-};
-</script>
 
 <style>
 #app {
