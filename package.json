@@ -7,15 +7,15 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.20"
+    "vue": "^3.2.21"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.9.1",
-    "@vue/compiler-sfc": "^3.2.20",
+    "@vitejs/plugin-vue": "^1.9.4",
+    "@vue/compiler-sfc": "^3.2.21",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-vue": "^7.20.0",
+    "eslint-plugin-vue": "^8.0.3",
     "prettier": "2.4.1",
-    "vite": "^2.6.4"
+    "vite": "^2.6.13"
   }
 }
