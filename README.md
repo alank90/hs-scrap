@@ -12,6 +12,10 @@ _choco install gh_
 
 &nbsp;&nbsp;We also use the _npm-check-updates_ to update all packages to latest versions for each new project. Unfortunately as of this writing we also have to run _npm install vue@next_ seperately to insure latest version of vue is installed for the new project.
 
+## Google Sheets Key
+
+https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQMAjTTNGL1262_zV_dSHS_M_nlu29MlZpHuBoa4nsBnGA1JMu8W60Ur2756PgBMNrL0v6CvMyCDI/pub?output=csv
+
 
 
 
