@@ -3,11 +3,11 @@
 </template>
 
 <script setup>
-import { ref, Mounted } from "vue";
+import { ref, onMounted } from "vue";
 import Papa from "papaparse";
 
 const googleSheetsUrl = ref(
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQMAjTTNGL1262_zV_dSHS_M_nlu29MlZpHuBoa4nsBnGA1JMu8W60Ur2756PgBMNrL0v6CvMyCDI/pub?output=csv"
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQMAjTTNGL1262_zV_dSHS_M_nlu29MlZpHuBoa4nsBnGA1JMu8W60Ur2756PgBMNrL0v6CvMyCDI/pub?gid=0&single=true&output=csv"
 );
 
 // eslint-disable-next-line no-unused-vars
@@ -17,9 +17,8 @@ let scrapData = ref([]);
 const fetchSheetsData = Papa.parse(googleSheetsUrl, {
   download: true,
   header: true,
-  complete: (results) => (scrapData = console.log(results.data)),
+  complete: (results) => console.log(results.data),
 });
-Mounted(() => {
-  fetchSheetsData();
-});
+
+onMounted(fetchSheetsData);
 </script>
