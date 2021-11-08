@@ -1,16 +1,24 @@
 <template>
-  <h1>SHS Highschool Scrap Inventory</h1>
-
   <table>
-    <tr>
-      <th colspan="3">Laptops</th>
-      <th colspan="3">Make</th>
-      <th colspan="3">Model #</th>
-      <th colspan="2">Bar Code</th>
-      <th>Serial #</th>
-      <th>Location</th>
-      <th>Condition</th>
-    </tr>
+    <caption>
+      Highschool Scrap Table
+    </caption>
+    <thead>
+      <tr>
+        <th >Laptops</th>
+        <th >Make</th>
+        <th >Model #</th>
+        <th >Bar Code</th>
+        <th>Serial #</th>
+        <th>Location</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+    </tbody>
   </table>
 </template>
 
@@ -39,9 +47,34 @@ onMounted(fetchSheetsData);
 </script>
 
 <style scoped>
-table,
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #008;
+  text-align: center;
+  vertical-align: middle;
+}
+
+caption {
+  font-weight: 600;
+  font-size: 24px;
+  text-align: left;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+thead {
+  background-color: #333;
+  color: #fff;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 2%;
+}
+
+th,
 td {
   border: 1px solid #333;
+  padding: 8px;
 }
 
 thead,
@@ -49,4 +82,29 @@ tfoot {
   background-color: #333;
   color: #fff;
 }
+
+.cell-highlight {
+  background-color: gold;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #eee;
+}
+
+tbody th {
+  background-color: #36c;
+  color: #fff;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) th {
+  background-color: #25c;
+}
+
+
 </style>
