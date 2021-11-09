@@ -5,7 +5,7 @@ import DisplayScrap from "./components/DisplayScrap.vue";
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
   <DisplayScrap />
 </template>
 
@@ -17,5 +17,9 @@ import DisplayScrap from "./components/DisplayScrap.vue";
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+img[alt="Scrap"] {
+  border-radius: 50%;
 }
 </style>

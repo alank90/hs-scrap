@@ -1,35 +1,46 @@
 <template>
   <table>
     <caption>
-      Highschool Scrap Table
+      SHS Scrap Table
     </caption>
     <thead>
       <tr>
-        <th >Laptops</th>
-        <th >Make</th>
-        <th >Model #</th>
-        <th >Bar Code</th>
+        <th>Equipment Type</th>
+        <th>Make</th>
+        <th>Model #</th>
+        <th>Bar Code</th>
         <th>Serial #</th>
         <th>Location</th>
         <th>Condition</th>
       </tr>
     </thead>
     <tbody>
-      <tr></tr>
-      <tr></tr>
-      <tr></tr>
+      <tr v-for="item in scrapDataEmptyRowsRemoved" :key="item">
+        <td>{{ item["Equipment Type"] }}</td>
+        <td>{{ item["Make"] }}</td>
+        <td>{{ item["Model #"] }}</td>
+        <td>{{ item["Bar Code"] }}</td>
+        <td>{{ item["Serial #"] }}</td>
+        <td>{{ item["Location"] }}</td>
+        <td>{{ item["Condition"] }}</td>
+      </tr>
     </tbody>
   </table>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Papa from "papaparse";
 
 const googleSheetsUrl =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQMAjTTNGL1262_zV_dSHS_M_nlu29MlZpHuBoa4nsBnGA1JMu8W60Ur2756PgBMNrL0v6CvMyCDI/pub?gid=0&single=true&output=csv";
 // eslint-disable-next-line no-unused-vars
-let scrapData = ref([1, 2, 3]);
+let scrapData = ref([]);
+let scrapDataEmptyRowsRemoved = computed(() =>
+  scrapData.value.filter(
+    (item) => item["Equipment Type"] !== "" || item["Make"] !== ""
+  )
+);
 
 // eslint-disable-next-line no-unused-vars
 const fetchSheetsData = function () {
@@ -40,23 +51,39 @@ const fetchSheetsData = function () {
       scrapData.value = results.data;
     },
   });
-  console.log("scrapData after", scrapData.value);
 };
 
 onMounted(fetchSheetsData);
 </script>
 
 <style scoped>
+/*
+ * Define the widths: play around with these to get a best fit.
+ */
+:root {
+  --text-width: 180px;
+  --num-width: 80px;
+}
+
+HTML CSS Result Skip Results Iframe EDIT ON * {
+  box-sizing: border-box;
+  font-family: "Avenir", "Helvetica", sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+}
+
+/* Default table styles for this demo */
 table {
   border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #008;
   text-align: center;
   vertical-align: middle;
+  width: 100%;
 }
 
 caption {
-  font-weight: 600;
+  font-weight: bold;
   font-size: 24px;
   text-align: left;
   color: #333;
@@ -65,46 +92,51 @@ caption {
 
 thead {
   background-color: #333;
-  color: #fff;
+  color: white;
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 2%;
 }
 
-th,
-td {
-  border: 1px solid #333;
+table th,
+table td {
+  padding: 10px 20px;
+  border: 1px solid black;
   padding: 8px;
 }
 
-thead,
-tfoot {
-  background-color: #333;
-  color: #fff;
-}
-
-.cell-highlight {
-  background-color: gold;
-  font-weight: 600;
-}
-
 tbody tr:nth-child(odd) {
-  background-color: #fff;
+  background-color: rgb(223, 234, 236);
+}
+tbody tr:nth-child(odd):hover {
+  background-color: rgb(223, 234, 236, 0.7);
 }
 
 tbody tr:nth-child(even) {
-  background-color: #eee;
+  background-color: rgb(212, 223, 240);
+}
+tbody tr:nth-child(even):hover {
+  background-color: rgb(212, 223, 240, 0.7);
 }
 
-tbody th {
-  background-color: #36c;
-  color: #fff;
-  text-align: left;
+/* Simple CSS for flexbox table on mobile */
+@media (max-width: 800px) {
+  table thead {
+    left: -9999px;
+    position: absolute;
+    visibility: hidden;
+  }
+  table tr {
+    border-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  table td {
+    border: 1px solid;
+    margin: 0 -1px -1px 0;
+    width: 50%;
+  }
 }
-
-tbody tr:nth-child(even) th {
-  background-color: #25c;
-}
-
-
 </style>
