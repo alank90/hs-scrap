@@ -5,7 +5,6 @@
     </caption>
     <thead>
       <tr>
-        <th>Equipment Type</th>
         <th>Make</th>
         <th>Model #</th>
         <th>Bar Code</th>
@@ -15,15 +14,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in scrapDataEmptyRowsRemoved" :key="item">
-        <td>{{ item["Equipment Type"] }}</td>
-        <td>{{ item["Make"] }}</td>
-        <td>{{ item["Model #"] }}</td>
-        <td>{{ item["Bar Code"] }}</td>
-        <td>{{ item["Serial #"] }}</td>
-        <td>{{ item["Location"] }}</td>
-        <td>{{ item["Condition"] }}</td>
-      </tr>
+      <template v-for="(item, index) in scrapDataEmptyRowsRemoved">
+        <tr v-if="item['Equipment Type']" :key="index">
+          <td class="equipt-type" colspan="6">
+            Equipment Type - {{ item["Equipment Type"] }}
+          </td>
+        </tr>
+        <tr v-else :key="item">
+          <td>{{ item["Make"] }}</td>
+          <td>{{ item["Model #"] }}</td>
+          <td>{{ item["Bar Code"] }}</td>
+          <td>{{ item["Serial #"] }}</td>
+          <td>{{ item["Location"] }}</td>
+          <td>{{ item["Condition"] }}</td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>
@@ -117,6 +122,10 @@ tbody tr:nth-child(even) {
 }
 tbody tr:nth-child(even):hover {
   background-color: rgb(212, 223, 240, 0.7);
+}
+
+.equipt-type {
+  background-color: cadetblue;
 }
 
 /* Simple CSS for flexbox table on mobile */
