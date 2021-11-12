@@ -1,4 +1,9 @@
 <template>
+  <div v-if="failure">
+    <p>Error retrieving Google Sheets. Sorry.</p>
+  </div>
+
+
   <table>
     <caption>
       SHS Scrap Table
@@ -14,8 +19,8 @@
       </tr>
     </thead>
     <tbody>
-      <template v-for="(item, index) in scrapDataEmptyRowsRemoved">
-        <tr v-if="item['Equipment Type']" :key="index">
+      <template v-for="item in scrapDataHSClassroomsEmptyRowsRemoved">
+        <tr v-if="item['Equipment Type']" :key="item['Serial #']">
           <td class="equipt-type" colspan="6">
             Equipment Type - {{ item["Equipment Type"] }}
           </td>
@@ -35,26 +40,33 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import Papa from "papaparse";
+import SteinStore from "stein-js-client";
 
-const googleSheetsUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQMAjTTNGL1262_zV_dSHS_M_nlu29MlZpHuBoa4nsBnGA1JMu8W60Ur2756PgBMNrL0v6CvMyCDI/pub?gid=0&single=true&output=csv";
+let scrapDataHSClassrooms = ref([]);
+let failure = ref(false);
+
+// First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
-let scrapData = ref([]);
-let scrapDataEmptyRowsRemoved = computed(() =>
-  scrapData.value.filter(
-    (item) => item["Equipment Type"] !== "" || item["Make"] !== ""
+
+let scrapDataHSClassroomsEmptyRowsRemoved = computed(() =>
+  scrapDataHSClassrooms.value.filter(
+    (item) => item["Equipment Type"] || item["Make"]
   )
 );
 
+// Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
 const fetchSheetsData = function () {
-  Papa.parse(googleSheetsUrl, {
-    download: true,
-    header: true,
-    complete: (results) => {
-      scrapData.value = results.data;
-    },
+  const store = new SteinStore(
+    "https://api.steinhq.com/v1/storages/618e81028d29ba2379044caa"
+  );
+  store.read("HS - Classrooms").then((data) => {
+    console.log(data);
+    scrapDataHSClassrooms.value = data;
+  }).catch( e => {
+      console.error(e);
+      failure.value = true;
+
   });
 };
 

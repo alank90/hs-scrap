@@ -1,13 +1,30 @@
+<template>
+  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+  <div id="app">
+    <button @click="showModal" type="button" class="btn">Open Modal</button>
+    <FormModal v-show="isModalVisible" @close="closeModal" />
+  </div>
+  <DisplayScrap />
+</template>
+
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import DisplayScrap from "./components/DisplayScrap.vue";
-</script>
+import { ref } from "vue";
+import DisplayScrap from "./components/display-scrap.vue";
+import FormModal from "./components/form-modal.vue";
+// Variable Declarations
+let isModalVisible = ref(false);
 
-<template>
-  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
-  <DisplayScrap />
-</template>
+// Methods
+const showModal = () => {
+  console.log("I clicked the button");
+  isModalVisible.value = true;
+};
+const closeModal = () => {
+  console.log(" I clicked closed button");
+  isModalVisible.value = false};
+</script>
 
 <style>
 #app {
