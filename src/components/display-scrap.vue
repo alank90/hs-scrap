@@ -3,7 +3,6 @@
     <p>Error retrieving Google Sheets. Sorry.</p>
   </div>
 
-
   <table>
     <caption>
       SHS Scrap Table
@@ -60,14 +59,15 @@ const fetchSheetsData = function () {
   const store = new SteinStore(
     "https://api.steinhq.com/v1/storages/618e81028d29ba2379044caa"
   );
-  store.read("HS - Classrooms").then((data) => {
-    console.log(data);
-    scrapDataHSClassrooms.value = data;
-  }).catch( e => {
+  store
+    .read("HS - Classrooms")
+    .then((data) => {
+      scrapDataHSClassrooms.value = data;
+    })
+    .catch((e) => {
       console.error(e);
       failure.value = true;
-
-  });
+    });
 };
 
 onMounted(fetchSheetsData);
@@ -137,7 +137,7 @@ tbody tr:nth-child(even):hover {
 }
 
 .equipt-type {
-  background-color: cadetblue;
+  background-color: #8db7e0;
 }
 
 /* Simple CSS for flexbox table on mobile */
