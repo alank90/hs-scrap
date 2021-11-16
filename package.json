@@ -7,7 +7,6 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "papaparse": "^5.3.1",
     "stein-js-client": "^0.0.2",
     "vue": "^3.2.21"
   },

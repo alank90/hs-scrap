@@ -31,6 +31,14 @@
                   v-model="form.eqpmntType"
                 >
                   <option value="" disabled="disabled">Nothing Selected</option>
+                  <!-- Generate Drop Down Menu !-->
+                  <option
+                    v-for="option in options.eqpmntType"
+                    :value="option.value"
+                    :key="option.value"
+                  >
+                    {{ option.text }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -38,55 +46,55 @@
             <div class="field">
               <label class="label">Model #</label>
               <div class="control">
-                <textarea
-                  class="textarea"
+                <input
+                  class="input"
                   placeholder="Model #"
                   v-model="form.modelNum"
-                ></textarea>
+                />
               </div>
             </div>
 
             <div class="field">
               <label class="label">Bar Code</label>
               <div class="control">
-                <textarea
-                  class="textarea"
+                <input
+                  class="input"
                   placeholder="Bar Code"
                   v-model="form.barCode"
-                ></textarea>
+                />
               </div>
             </div>
 
             <div class="field">
               <label class="label">Serial #</label>
               <div class="control">
-                <textarea
-                  class="textarea"
+                <input
+                  class="input"
                   placeholder="Serial #"
                   v-model="form.serialNum"
-                ></textarea>
+                />
               </div>
             </div>
 
             <div class="field">
               <label class="label">Location</label>
               <div class="control">
-                <textarea
-                  class="textarea"
+                <input
+                  class="input"
                   placeholder="Location"
                   v-model="form.location"
-                ></textarea>
+                />
               </div>
             </div>
 
             <div class="field">
               <label class="label">Condition</label>
               <div class="control">
-                <textarea
-                  class="textarea"
+                <input
+                  class="input"
                   placeholder="Condition"
                   v-model="form.condition"
-                ></textarea>
+                />
               </div>
             </div>
           </div>
@@ -104,7 +112,7 @@
             class="btn-blue"
             aria-label="Close modal"
           >
-            Close Modal
+            Close
           </button>
         </footer>
       </div>
@@ -123,6 +131,18 @@ let form = ref({
   serialNum: "",
   location: "",
   condition: "",
+});
+const options = ref({
+  eqpmntType: [
+    { value: "laptops", text: "Laptops" },
+    { value: "iPads", text: "iPads" },
+    { value: "docCamera", text: "Document Camera" },
+    { value: "projector", text: "Overhead Projector" },
+    { value: "scanner", text: "Scanner" },
+    { value: "macbooks", text: "MacBooks" },
+    { value: "chromebooks", text: "Chromebooks" },
+    { value: "desktops", text: "Desktops" },
+  ],
 });
 
 // Setup an event-emmiter that is listened for on App.vue @close event-listener
