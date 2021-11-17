@@ -22,14 +22,16 @@
 </template>
 
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
+// This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref } from "vue";
 import DisplayScrap from "./components/display-scrap.vue";
 import FormModal from "./components/form-modal.vue";
+
 // Variable Declarations
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
+
 // Methods
 const showModal = () => {
   isModalVisible.value = true;
@@ -55,6 +57,7 @@ img[alt="Scrap"] {
   border-radius: 50%;
 }
 
+/* ========== Button Glow Stylings ========== */
 .glow-on-hover {
   width: 220px;
   height: 50px;
@@ -119,6 +122,8 @@ img[alt="Scrap"] {
   top: 0;
   border-radius: 10px;
 }
+
+/* ========== End Button Glow Stylings ========== */
 
 /* Transition Effect */
 .button-fade-enter-from,

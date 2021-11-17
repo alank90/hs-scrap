@@ -7,10 +7,8 @@
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
       >
+        <button @click="close" type="button" class="btn-close">&#11199;</button>
         <header class="modal-header" id="modalTitle">
-          <button @click="close" type="button" class="btn-close btn-blue">
-            &#11199;
-          </button>
           <slot name="header"> This is default title! </slot>
         </header>
 
@@ -19,85 +17,95 @@
         <!-- ======================================================== !-->
 
         <section class="modal-body form" id="modalDescription">
-          <slot name="body"> This is default body! </slot>
-          <div class="field">
-            <label for="" class="label">Equipment Type</label>
-            <div class="control">
-              <div class="select">
-                <select
-                  name="
+          <form v-on:submit.prevent="submitForm()">
+            <slot name="body"> This is default body! </slot>
+            <div class="field">
+              <label for="" class="label">Equipment Type</label>
+              <div class="control">
+                <div class="select">
+                  <select
+                    name="
                 "
-                  id=""
-                  v-model="form.eqpmntType"
-                >
-                  <option value="" disabled="disabled">Nothing Selected</option>
-                  <!-- Generate Drop Down Menu !-->
-                  <option
-                    v-for="option in options.eqpmntType"
-                    :value="option.value"
-                    :key="option.value"
+                    id=""
+                    v-model="form.eqpmntType"
                   >
-                    {{ option.text }}
-                  </option>
-                </select>
+                    <option value="" disabled="disabled">
+                      Nothing Selected
+                    </option>
+                    <!-- Generate Drop Down Menu !-->
+                    <option
+                      v-for="option in options.eqpmntType"
+                      :value="option.value"
+                      :key="option.value"
+                    >
+                      {{ option.text }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Model #</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Model #"
+                    v-model="form.modelNum"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Bar Code</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Bar Code"
+                    v-model="form.barCode"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Serial #</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Serial #"
+                    v-model="form.serialNum"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Location</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Location"
+                    v-model="form.location"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Condition</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Condition"
+                    v-model="form.condition"
+                  />
+                </div>
               </div>
             </div>
 
-            <div class="field">
-              <label class="label">Model #</label>
+            <div class="field is-grouped">
               <div class="control">
-                <input
-                  class="input"
-                  placeholder="Model #"
-                  v-model="form.modelNum"
-                />
+                <button class="button is-primary">Submit</button>
               </div>
             </div>
-
-            <div class="field">
-              <label class="label">Bar Code</label>
-              <div class="control">
-                <input
-                  class="input"
-                  placeholder="Bar Code"
-                  v-model="form.barCode"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Serial #</label>
-              <div class="control">
-                <input
-                  class="input"
-                  placeholder="Serial #"
-                  v-model="form.serialNum"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Location</label>
-              <div class="control">
-                <input
-                  class="input"
-                  placeholder="Location"
-                  v-model="form.location"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Condition</label>
-              <div class="control">
-                <input
-                  class="input"
-                  placeholder="Condition"
-                  v-model="form.condition"
-                />
-              </div>
-            </div>
-          </div>
+          </form>
         </section>
 
         <!-- ======================================================== !-->
@@ -105,14 +113,13 @@
         <!-- ======================================================== !-->
 
         <footer class="modal-footer">
-          <slot name="footer"> This is default footer! </slot>
           <button
             @click="close"
             type="button"
-            class="btn-blue"
+            class="button is-info"
             aria-label="Close modal"
           >
-            Close
+            Close Form
           </button>
         </footer>
       </div>
@@ -121,9 +128,9 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { reactive, defineEmits } from "vue";
 // Variables
-let form = ref({
+let form = reactive({
   eqpmntType: "",
   make: "",
   modelNum: "",
@@ -132,7 +139,7 @@ let form = ref({
   location: "",
   condition: "",
 });
-const options = ref({
+const options = reactive({
   eqpmntType: [
     { value: "laptops", text: "Laptops" },
     { value: "iPads", text: "iPads" },
@@ -145,10 +152,19 @@ const options = ref({
   ],
 });
 
+const formArray = [];
+
 // Setup an event-emmiter that is listened for on App.vue @close event-listener
 const emit = defineEmits(["close"]);
 const close = () => {
   emit("close");
+};
+
+// ========= Methods ================ //
+const submitForm = function () {
+  formArray.push(form);
+  console.log(form);
+  console.log(formArray[0].eqpmntType);
 };
 </script>
 
@@ -171,6 +187,9 @@ const close = () => {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  max-width: 500px;
+  height: auto;
+  margin: 10px auto;
 }
 
 .modal-header,
@@ -208,13 +227,6 @@ const close = () => {
   font-weight: bold;
   color: #2e456d;
   background: transparent;
-}
-
-.btn-blue {
-  color: white;
-  background: #2e456d;
-  border: 1px solid #2e456d;
-  border-radius: 2px;
 }
 
 /* Transition Effect */
