@@ -1,14 +1,23 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
+      
       <div
         class="modal"
         role="dialog"
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
       >
+<<<<<<< HEAD
         <button @click="close" type="button" class="btn-close">&#11199;</button>
         <header class="modal-header" id="modalTitle">
+=======
+      <button @click="close" type="button" class="btn-close">
+            &#11199;
+          </button>
+        <header class="modal-header" id="modalTitle">
+          
+>>>>>>> ecab7da43146bb40094da4ebbe19b4b9b021ae33
           <slot name="header"> This is default title! </slot>
         </header>
 
@@ -17,7 +26,11 @@
         <!-- ======================================================== !-->
 
         <section class="modal-body form" id="modalDescription">
+<<<<<<< HEAD
           <form v-on:submit.prevent="submitForm()">
+=======
+          <form v-on:submit.prevent="submitForm();">
+>>>>>>> ecab7da43146bb40094da4ebbe19b4b9b021ae33
             <slot name="body"> This is default body! </slot>
             <div class="field">
               <label for="" class="label">Equipment Type</label>
@@ -161,11 +174,17 @@ const close = () => {
 };
 
 // ========= Methods ================ //
+<<<<<<< HEAD
 const submitForm = function () {
   formArray.push(form);
   console.log(form);
   console.log(formArray[0].eqpmntType);
 };
+=======
+const submitForm = function() {
+  console.log(form.value.modelNum);
+}
+>>>>>>> ecab7da43146bb40094da4ebbe19b4b9b021ae33
 </script>
 
 <style scoped>
@@ -229,6 +248,10 @@ const submitForm = function () {
   background: transparent;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ecab7da43146bb40094da4ebbe19b4b9b021ae33
 /* Transition Effect */
 .modal-fade-enter-from,
 .modal-fade-leave-to {
