@@ -10,7 +10,7 @@
     <thead>
       <tr>
         <th>Make</th>
-        <th>Model #</th>
+        <th>Model Number</th>
         <th>Bar Code</th>
         <th>Serial #</th>
         <th>Location</th>
@@ -19,16 +19,16 @@
     </thead>
     <tbody>
       <template v-for="item in scrapDataHSClassroomsEmptyRowsRemoved">
-        <tr v-if="item['Equipment Type']" :key="item['Serial #']">
+        <tr v-if="item['Equipment']" :key="item['SerialNum']">
           <td class="equipt-type" colspan="6">
-            Equipment Type - {{ item["Equipment Type"] }}
+            Equipment - {{ item["Equipment"] }}
           </td>
         </tr>
         <tr v-else :key="item">
           <td>{{ item["Make"] }}</td>
-          <td>{{ item["Model #"] }}</td>
-          <td>{{ item["Bar Code"] }}</td>
-          <td>{{ item["Serial #"] }}</td>
+          <td>{{ item["ModelNum"] }}</td>
+          <td>{{ item["Barcode"] }}</td>
+          <td>{{ item["SerialNum"] }}</td>
           <td>{{ item["Location"] }}</td>
           <td>{{ item["Condition"] }}</td>
         </tr>
@@ -49,7 +49,7 @@ let failure = ref(false);
 
 let scrapDataHSClassroomsEmptyRowsRemoved = computed(() =>
   scrapDataHSClassrooms.value.filter(
-    (item) => item["Equipment Type"] || item["Make"]
+    (item) => item["Equipment"] || item["Make"]
   )
 );
 
@@ -113,6 +113,10 @@ thead {
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 2%;
+}
+
+th {
+  color: #fff;
 }
 
 table th,
