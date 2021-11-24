@@ -27,7 +27,7 @@
                     name="
                 "
                     id=""
-                    v-model="form.eqpmntType"
+                    v-model="form.Equipment"
                   >
                     <option value="" disabled="disabled">
                       Nothing Selected
@@ -50,7 +50,7 @@
                   <input
                     class="input"
                     placeholder="Model #"
-                    v-model="form.modelNum"
+                    v-model="form.ModelNum"
                   />
                 </div>
               </div>
@@ -61,7 +61,7 @@
                   <input
                     class="input"
                     placeholder="Bar Code"
-                    v-model="form.barCode"
+                    v-model="form.Barcode"
                   />
                 </div>
               </div>
@@ -72,7 +72,7 @@
                   <input
                     class="input"
                     placeholder="Serial #"
-                    v-model="form.serialNum"
+                    v-model="form.SerialNum"
                   />
                 </div>
               </div>
@@ -83,7 +83,7 @@
                   <input
                     class="input"
                     placeholder="Location"
-                    v-model="form.location"
+                    v-model="form.Location"
                   />
                 </div>
               </div>
@@ -94,7 +94,7 @@
                   <input
                     class="input"
                     placeholder="Condition"
-                    v-model="form.condition"
+                    v-model="form.Condition"
                   />
                 </div>
               </div>
@@ -128,16 +128,18 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits } from "vue";
+import { reactive, defineEmits, toRefs } from "vue";
+import addRow from "../helperFunctions/addRow.js";
+
 // Variables
 let form = reactive({
-  eqpmntType: "",
-  make: "",
-  modelNum: "",
-  barCode: "",
-  serialNum: "",
-  location: "",
-  condition: "",
+  Equipment: "",
+  Make: "",
+  ModelNum: "",
+  Barcode: "",
+  SerialNum: "",
+  Location: "",
+  Condition: "",
 });
 const options = reactive({
   eqpmntType: [
@@ -153,6 +155,15 @@ const options = reactive({
 });
 
 const formArray = [];
+const testArray = [
+  {
+    Equipment: "Laptop",
+    Make: "Dell",
+    ModelNum: "5544",
+    Barcode: "707888",
+    Condition: "Fair",
+  },
+];
 
 // Setup an event-emmiter that is listened for on App.vue @close event-listener
 const emit = defineEmits(["close"]);
@@ -162,9 +173,12 @@ const close = () => {
 
 // ========= Methods ================ //
 const submitForm = function () {
-  formArray.push(form);
-  console.log(formArray[0]);
-  console.log(formArray[0].eqpmntType);
+  const formAsPlainObject = toRefs(form);
+  formArray.push(formAsPlainObject);
+  console.log(formArray);
+  console.log(testArray);
+
+  addRow(testArray);
 };
 </script>
 
