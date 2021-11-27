@@ -106,6 +106,8 @@
               </div>
             </div>
           </form>
+
+          <p v-if="message">Added {{ message }} Successful!</p>
         </section>
 
         <!-- ======================================================== !-->
@@ -128,7 +130,7 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits, toRefs } from "vue";
+import { reactive, defineEmits, ref, toRaw } from "vue";
 import addRow from "../helperFunctions/addRow.js";
 
 // Variables
@@ -154,16 +156,8 @@ const options = reactive({
   ],
 });
 
-const formArray = [];
-const testArray = [
-  {
-    Equipment: "Laptop",
-    Make: "Dell",
-    ModelNum: "5544",
-    Barcode: "707888",
-    Condition: "Fair",
-  },
-];
+let formArray = [];
+let message = ref("");
 
 // Setup an event-emmiter that is listened for on App.vue @close event-listener
 const emit = defineEmits(["close"]);
@@ -172,13 +166,14 @@ const close = () => {
 };
 
 // ========= Methods ================ //
-const submitForm = function () {
-  const formAsPlainObject = toRefs(form);
+const submitForm = async function () {
+  const formAsPlainObject = toRaw(form);
+  let response = {};
   formArray.push(formAsPlainObject);
-  console.log(formArray);
-  console.log(testArray);
 
-  addRow(testArray);
+  // Submit form to Google sheets via Stein
+  response = await addRow(formArray);
+  message.value = response.updatedRange;
 };
 </script>
 

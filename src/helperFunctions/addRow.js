@@ -3,17 +3,19 @@ import SteinStore from "stein-js-client";
 const store = new SteinStore(
   "https://api.steinhq.com/v1/storages/618e81028d29ba2379044caa"
 );
+var response = "";
 
-const addRow = function (row) {
-  console.log(row);
-  store
+const addRow = async function (row) {
+  await store
     .append("HS - Classrooms", row)
     .then((res) => {
-      console.log(res);
+      response = res;
     })
     .catch((e) => {
       console.error(e);
     });
+
+  return response;
 };
 
 export default addRow;
