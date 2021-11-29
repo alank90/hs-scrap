@@ -18,7 +18,6 @@
 
         <section class="modal-body form" id="modalDescription">
           <form v-on:submit.prevent="submitForm()">
-            <slot name="body"> This is default body! </slot>
             <div class="field">
               <label for="" class="label">Equipment Type</label>
               <div class="control">
@@ -41,6 +40,17 @@
                       {{ option.text }}
                     </option>
                   </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Make</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Equipment Maker"
+                    v-model="form.Make"
+                  />
                 </div>
               </div>
 
@@ -166,7 +176,7 @@ const close = () => {
 };
 
 // ========= Methods ================ //
-const submitForm = async function () {
+const submitForm = async () => {
   const formAsPlainObject = toRaw(form);
   let response = {};
   formArray.push(formAsPlainObject);
