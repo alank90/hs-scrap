@@ -15,12 +15,16 @@
         <th>Serial #</th>
         <th>Location</th>
         <th>Condition</th>
+        <th>Equipment</th>
       </tr>
     </thead>
     <tbody>
       <template v-for="item in scrapDataHSClassroomsEmptyRowsRemoved">
-        <tr v-if="item['Equipment']" :key="item['SerialNum']">
-          <td class="equipt-type" colspan="6">
+        <tr
+          v-if="equiptTypes.includes(item['Equipment'])"
+          :key="item['SerialNum']"
+        >
+          <td class="equipt-type" colspan="8">
             Equipment - {{ item["Equipment"] }}
           </td>
         </tr>
@@ -31,6 +35,10 @@
           <td>{{ item["SerialNum"] }}</td>
           <td>{{ item["Location"] }}</td>
           <td>{{ item["Condition"] }}</td>
+          <td>{{ item["Equipment"] }}</td>
+          <td @click="deleteRow" class="delete-row" title="Delete Row">
+            &#x1f5d1;
+          </td>
         </tr>
       </template>
     </tbody>
@@ -40,18 +48,32 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
+import deleteRow from "../helperFunctions/deleteRow.js";
 
+//======= Vars ================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
+const equiptTypes = [
+  "Laptops",
+  "iPads",
+  "Document Camera",
+  "Overhead Projectors",
+  "Scanner",
+  "MacBooks",
+  "Chromebooks",
+  "Desktops",
+];
 
+// ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
-
 let scrapDataHSClassroomsEmptyRowsRemoved = computed(() =>
   scrapDataHSClassrooms.value.filter(
     (item) => item["Equipment"] || item["Make"]
   )
 );
+
+// ============ Methods ====================== //
 
 // Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
@@ -71,6 +93,8 @@ const fetchSheetsData = function () {
 };
 
 onMounted(fetchSheetsData);
+
+deleteRow;
 </script>
 
 <style scoped>
@@ -115,15 +139,16 @@ thead {
   letter-spacing: 2%;
 }
 
-th {
-  color: #fff;
-}
-
 table th,
 table td {
   padding: 10px 20px;
   border: 1px solid black;
   padding: 8px;
+}
+
+table th {
+  color: #fff;
+  border-right-color: #8db7e0;
 }
 
 tbody tr:nth-child(odd) {
@@ -142,6 +167,10 @@ tbody tr:nth-child(even):hover {
 
 .equipt-type {
   background-color: #8db7e0;
+}
+
+.delete-row {
+  cursor: pointer;
 }
 
 /* Simple CSS for flexbox table on mobile */

@@ -179,7 +179,7 @@ const close = () => {
 const submitForm = async () => {
   //============ Vars ================= //
   let formAsPlainObject = toRaw(form);
-  delete formAsPlainObject.Equipment;
+  //delete formAsPlainObject.Equipment;
 
   let response = {};
 
