@@ -3,6 +3,8 @@
     <p>Error retrieving Google Sheets. Sorry.</p>
   </div>
 
+  <p v-if="message">Deleted row {{ message }} Successful!</p>
+
   <table>
     <caption>
       SHS Scrap Table
@@ -36,7 +38,12 @@
           <td>{{ item["Location"] }}</td>
           <td>{{ item["Condition"] }}</td>
           <td>{{ item["Equipment"] }}</td>
-          <td @click="deleteRow" class="delete-row" title="Delete Row">
+          <td
+            @click="removeRow"
+            class="delete-row"
+            :data-id="item['Barcode'] + item['SerialNum']"
+            title="Delete Row"
+          >
             &#x1f5d1;
           </td>
         </tr>
@@ -46,13 +53,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
 //======= Vars ================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
+let message = reactive({});
 const equiptTypes = [
   "Laptops",
   "iPads",
@@ -94,7 +102,15 @@ const fetchSheetsData = function () {
 
 onMounted(fetchSheetsData);
 
-deleteRow;
+// Called when trash can clicked on the page
+const removeRow = async (e) => {
+  console.log("test");
+  const rowTarget = e.target;
+  message = await deleteRow(rowTarget);
+  /*message.value = message.clearedRowsCount;
+   */
+};
+// ========== End of Methods ====================== //
 </script>
 
 <style scoped>

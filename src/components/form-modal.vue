@@ -185,7 +185,6 @@ const submitForm = async () => {
 
   // Delete the Equipment Type property before posting data to Sheets
   formArray.push(formAsPlainObject);
-  console.log(formAsPlainObject);
 
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
