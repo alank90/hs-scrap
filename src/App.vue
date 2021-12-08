@@ -1,21 +1,31 @@
 <template>
+  <!-- ============== Modal Component ============= -->
   <FormModal v-show="isModalVisible" @close="closeModal">
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </FormModal>
 
-  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+  <div id="main">
+    <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
-  <div id="app">
-    <transition name="button-fade">
-      <button
-        v-show="isButtonVisible"
-        @click="showModal"
-        type="button"
-        class="btn glow-on-hover"
-      >
-        Add Equipment
-      </button>
-    </transition>
+    <div class="top-container">
+      <transition name="button-fade">
+        <button
+          v-show="isButtonVisible"
+          @click="showModal"
+          type="button"
+          class="btn glow-on-hover"
+        >
+          Add Equipment
+        </button>
+      </transition>
+
+      <a
+        href="https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit#gid=0"
+        class="sheets-link"
+        _target="blank"
+        >To Google Sheets
+      </a>
+    </div>
   </div>
 
   <DisplayScrap />
@@ -44,17 +54,37 @@ const closeModal = () => {
 </script>
 
 <style>
-#app {
+#main {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 
 img[alt="Scrap"] {
   border-radius: 50%;
+  display: block;
+  margin: 0 auto 30px;
+}
+
+.top-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sheets-link {
+  background-color: #34a853;
+  color: #ffffff;
+  min-width: 200px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.btn {
 }
 
 /* ========== Button Glow Stylings ========== */

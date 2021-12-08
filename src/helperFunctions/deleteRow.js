@@ -5,12 +5,14 @@ const store = new SteinStore(
 );
 var response = "";
 
-const deleteRow = async (e) => {
+const deleteRow = async (row) => {
   // get the row ID stored in data-id attr
-  const rowID = e.target.dataset.id;
+
+  const rowID = row.dataset.id;
+  console.log(rowID);
 
   await store
-    .delete("HS _ Classrooms", {
+    .delete("HS - Classrooms", {
       search: { ID: rowID },
     })
     .then((res) => {
@@ -21,8 +23,6 @@ const deleteRow = async (e) => {
     });
 
   console.log("I deleted row");
-  console.log(rowID);
-  console.log(e.target);
   return response;
 };
 

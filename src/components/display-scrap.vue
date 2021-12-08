@@ -1,10 +1,17 @@
 <template>
-  <div v-if="failure">
-    <p>Error retrieving Google Sheets. Sorry.</p>
-  </div>
+  <!-- ===== Some conditional HTML markup ========= -->
+  <p v-if="failure" class="alert">Error retrieving Google Sheets. Sorry.</p>
 
-  <p v-if="message">Deleted row {{ message }} Successful!</p>
+  <p v-if="rowCount > 0" class="status-message">
+    Deleted {{ rowCount }} row. Successful &#10004;
+  </p>
 
+  <p v-if="message" class="status-message" title="Click to dismiss">
+    Operation Cancelled <span @click="message = false">&#10060;</span>
+  </p>
+
+
+  <!-- ============== Begin Table Markup ================= !-->
   <table>
     <caption>
       SHS Scrap Table
@@ -53,14 +60,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
 //======= Vars ================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
-let message = reactive({});
+let rowCount = ref(0);
+let message = ref(false);
 const equiptTypes = [
   "Laptops",
   "iPads",
@@ -104,11 +112,13 @@ onMounted(fetchSheetsData);
 
 // Called when trash can clicked on the page
 const removeRow = async (e) => {
-  console.log("test");
-  const rowTarget = e.target;
-  message = await deleteRow(rowTarget);
-  /*message.value = message.clearedRowsCount;
-   */
+  let result = confirm("Are you sure?");
+  if (result) {
+    let response = await deleteRow(e.target);
+    rowCount.value = response.clearedRowsCount;
+  } else {
+    message.value = true;
+  }
 };
 // ========== End of Methods ====================== //
 </script>
@@ -144,7 +154,7 @@ caption {
   font-size: 24px;
   text-align: left;
   color: #333;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 thead {
@@ -187,6 +197,24 @@ tbody tr:nth-child(even):hover {
 
 .delete-row {
   cursor: pointer;
+}
+
+.status-message {
+  color: #069e20;
+  font-weight: 600;
+  font-size: 2rem;
+  margin: 15px;
+}
+
+.status-message span {
+  cursor: pointer;
+}
+
+.alert {
+  color: #d35501;
+  font-weight: 600;
+  font-size: 2rem;
+  margin: 15px;
 }
 
 /* Simple CSS for flexbox table on mobile */
