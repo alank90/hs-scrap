@@ -10,7 +10,6 @@
     Operation Cancelled <span @click="message = false">&#10060;</span>
   </p>
 
-
   <!-- ============== Begin Table Markup ================= !-->
   <table>
     <caption>
@@ -60,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -69,6 +68,17 @@ let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
 let rowCount = ref(0);
 let message = ref(false);
+let oEquiptByType = reactive({
+  laptops: [],
+  iPads: [],
+  cameras: [],
+  projectors: [],
+  chromebooks: [],
+  desktops: [],
+  macBooks: [],
+  scanners: [],
+});
+
 const equiptTypes = [
   "Laptops",
   "iPads",
@@ -88,8 +98,16 @@ let scrapDataHSClassroomsEmptyRowsRemoved = computed(() =>
     (item) => item["Equipment"] || item["Make"]
   )
 );
+// Need to unRef scrapDataHS...
+
+console.log(typeof scrapDataHSClassroomsEmptyRowsRemoved);
 
 // ============ Methods ====================== //
+
+// Let's construct an object that separates equipment by type
+/* scrapDataHSClassroomsEmptyRowsRemoved.forEach((element) => {
+  //console.log(element);
+}); */
 
 // Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
@@ -120,6 +138,10 @@ const removeRow = async (e) => {
     message.value = true;
   }
 };
+
+oEquiptByType["laptops"].push({ test: "mytest" });
+oEquiptByType["laptops"].push({ test1: "mytest2" });
+console.log(oEquiptByType);
 // ========== End of Methods ====================== //
 </script>
 
