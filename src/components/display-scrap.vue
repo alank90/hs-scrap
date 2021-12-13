@@ -27,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in scrapDataHSClassroomsEmptyRowsRemoved">
+      <template v-for="item in emptyRowsRemoved">
         <tr
           v-if="equiptTypes.includes(item['Equipment'])"
           :key="item['SerialNum']"
@@ -93,14 +93,14 @@ const equiptTypes = [
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
-let scrapDataHSClassroomsEmptyRowsRemoved = computed(() =>
+let emptyRowsRemoved = computed(() =>
   scrapDataHSClassrooms.value.filter(
     (item) => item["Equipment"] || item["Make"]
   )
 );
 // Need to unRef scrapDataHS...
 
-console.log(typeof scrapDataHSClassroomsEmptyRowsRemoved);
+console.log(emptyRowsRemoved);
 
 // ============ Methods ====================== //
 
@@ -139,8 +139,6 @@ const removeRow = async (e) => {
   }
 };
 
-oEquiptByType["laptops"].push({ test: "mytest" });
-oEquiptByType["laptops"].push({ test1: "mytest2" });
 console.log(oEquiptByType);
 // ========== End of Methods ====================== //
 </script>
