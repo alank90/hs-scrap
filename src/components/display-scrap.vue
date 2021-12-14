@@ -69,14 +69,14 @@ let failure = ref(false);
 let rowCount = ref(0);
 let message = ref(false);
 let oEquiptByType = reactive({
-  laptops: [],
-  iPads: [],
-  cameras: [],
-  projectors: [],
-  chromebooks: [],
-  desktops: [],
-  macBooks: [],
-  scanners: [],
+  Laptop: [],
+  iPad: [],
+  "Document Camera": [],
+  "Overhead Projector": [],
+  Chromebook: [],
+  Desktop: [],
+  MacBook: [],
+  Scanner: [],
 });
 
 const equiptTypes = [
@@ -98,16 +98,8 @@ let emptyRowsRemoved = computed(() =>
     (item) => item["Equipment"] || item["Make"]
   )
 );
-// Need to unRef scrapDataHS...
-
-console.log(emptyRowsRemoved);
 
 // ============ Methods ====================== //
-
-// Let's construct an object that separates equipment by type
-/* scrapDataHSClassroomsEmptyRowsRemoved.forEach((element) => {
-  //console.log(element);
-}); */
 
 // Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
@@ -119,6 +111,14 @@ const fetchSheetsData = function () {
     .read("HS - Classrooms")
     .then((data) => {
       scrapDataHSClassrooms.value = data;
+      emptyRowsRemoved.value.forEach((item) => {
+        // Let's construct an object that separates equipment by type
+        // Check if prooperty exists on oEquiptByType
+        const exists = Object.prototype.hasOwnProperty.call(oEquiptByType, item["Equipment"]);
+        console.log(exists);
+        console.log(oEquiptByType["item.Equipment".value]);
+        //oEquiptByType[item["Equipment"]].push(item);
+      });
     })
     .catch((e) => {
       console.error(e);
@@ -139,7 +139,6 @@ const removeRow = async (e) => {
   }
 };
 
-console.log(oEquiptByType);
 // ========== End of Methods ====================== //
 </script>
 
