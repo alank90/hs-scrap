@@ -113,11 +113,22 @@ const fetchSheetsData = function () {
       scrapDataHSClassrooms.value = data;
       emptyRowsRemoved.value.forEach((item) => {
         // Let's construct an object that separates equipment by type
-        // Check if prooperty exists on oEquiptByType
-        const exists = Object.prototype.hasOwnProperty.call(oEquiptByType, item["Equipment"]);
+        // Check if property exists on oEquiptByType object
+        const exists = Object.prototype.hasOwnProperty.call(
+          oEquiptByType,
+          item["Equipment"]
+        );
         console.log(exists);
-        console.log(oEquiptByType["item.Equipment".value]);
-        //oEquiptByType[item["Equipment"]].push(item);
+        console.log(item["Equipment"]);
+        console.log(oEquiptByType[item["Equipment"]]);
+        // If item(row) is good lets push the row onto the corresponding Object Array 
+        // in oEquiptByType. This will construct an object where each object property corresponds
+        // to an equipment category. And each oEquiptByType entry is an array where each array 
+        // element is a row from the SS. e.g., oEquiptByType["Laptop"][3] is a row from
+        // SS and is a laptop. 
+        if (exists) {
+          oEquiptByType[item["Equipment"]].push(item);
+        }
       });
     })
     .catch((e) => {
