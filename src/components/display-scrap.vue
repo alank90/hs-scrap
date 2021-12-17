@@ -27,27 +27,22 @@
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in emptyRowsRemoved">
-        <tr
-          v-if="equiptTypes.includes(item['Equipment'])"
-          :key="item['SerialNum']"
-        >
-          <td class="equipt-type" colspan="8">
-            Equipment - {{ item["Equipment"] }}
-          </td>
+      <template v-for="(item, key) in oEquiptByType">
+        <tr v-if="item.length > 0" :key="key">
+          <td class="equipt-type" colspan="8">Equipment - {{ key }}s</td>
         </tr>
-        <tr v-else :key="item">
-          <td>{{ item["Make"] }}</td>
-          <td>{{ item["ModelNum"] }}</td>
-          <td>{{ item["Barcode"] }}</td>
-          <td>{{ item["SerialNum"] }}</td>
-          <td>{{ item["Location"] }}</td>
-          <td>{{ item["Condition"] }}</td>
-          <td>{{ item["Equipment"] }}</td>
+        <tr v-for="oItem in item" :key="oItem[ID]">
+          <td>{{ oItem["Make"] }}</td>
+          <td>{{ oItem["ModelNum"] }}</td>
+          <td>{{ oItem["Barcode"] }}</td>
+          <td>{{ oItem["SerialNum"] }}</td>
+          <td>{{ oItem["Location"] }}</td>
+          <td>{{ oItem["Condition"] }}</td>
+          <td>{{ oItem["Equipment"] }}</td>
           <td
             @click="removeRow"
             class="delete-row"
-            :data-id="item['Barcode'] + item['SerialNum']"
+            :data-id="oItem['ID']"
             title="Delete Row"
           >
             &#x1f5d1;
@@ -79,17 +74,6 @@ let oEquiptByType = reactive({
   Scanner: [],
 });
 
-const equiptTypes = [
-  "Laptops",
-  "iPads",
-  "Document Camera",
-  "Overhead Projectors",
-  "Scanner",
-  "MacBooks",
-  "Chromebooks",
-  "Desktops",
-];
-
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
@@ -118,14 +102,12 @@ const fetchSheetsData = function () {
           oEquiptByType,
           item["Equipment"]
         );
-        console.log(exists);
-        console.log(item["Equipment"]);
-        console.log(oEquiptByType[item["Equipment"]]);
-        // If item(row) is good lets push the row onto the corresponding Object Array 
+
+        // If item(row) is good lets push the row onto the corresponding Object Array
         // in oEquiptByType. This will construct an object where each object property corresponds
-        // to an equipment category. And each oEquiptByType entry is an array where each array 
+        // to an equipment category. And each oEquiptByType entry is an array where each array
         // element is a row from the SS. e.g., oEquiptByType["Laptop"][3] is a row from
-        // SS and is a laptop. 
+        // SS and is a laptop.
         if (exists) {
           oEquiptByType[item["Equipment"]].push(item);
         }

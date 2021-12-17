@@ -7,9 +7,7 @@ var response = "";
 
 const deleteRow = async (row) => {
   // get the row ID stored in data-id attr
-
   const rowID = row.dataset.id;
-  console.log(rowID);
 
   await store
     .delete("HS - Classrooms", {
@@ -22,7 +20,6 @@ const deleteRow = async (row) => {
       console.error(e);
     });
 
-  console.log("I deleted row");
   return response;
 };
 
