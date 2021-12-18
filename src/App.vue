@@ -1,21 +1,31 @@
 <template>
+  <!-- ============== Modal Component ============= -->
   <FormModal v-show="isModalVisible" @close="closeModal">
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </FormModal>
 
-  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+  <div id="main">
+    <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
-  <div id="app">
-    <transition name="button-fade">
-      <button
-        v-show="isButtonVisible"
-        @click="showModal"
-        type="button"
-        class="btn glow-on-hover"
-      >
-        Add Equipment
-      </button>
-    </transition>
+    <div class="top-container">
+      <transition name="button-fade">
+        <button
+          v-show="isButtonVisible"
+          @click="showModal"
+          type="button"
+          class="btn glow-on-hover"
+        >
+          Add Equipment
+        </button>
+      </transition>
+
+      <a
+        href="https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit#gid=0"
+        class="sheets-link"
+        target="_blank"
+        >To Google Sheets
+      </a>
+    </div>
   </div>
 
   <DisplayScrap />
@@ -44,17 +54,48 @@ const closeModal = () => {
 </script>
 
 <style>
-#app {
+#main {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 
 img[alt="Scrap"] {
   border-radius: 50%;
+  display: block;
+  margin: 0 auto 30px;
+}
+
+.top-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sheets-link {
+  background-color: #34a853;
+  color: #ffffff;
+  min-width: 200px;
+  text-align: center;
+  border-radius: 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 3px;
+  transition: color .6s ease-in; 
+}
+.sheets-link:hover {
+    color: rgb(183, 230, 183);
+}
+
+.btn {
+  margin: 1px;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 /* ========== Button Glow Stylings ========== */

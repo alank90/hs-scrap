@@ -18,7 +18,6 @@
 
         <section class="modal-body form" id="modalDescription">
           <form v-on:submit.prevent="submitForm()">
-            <slot name="body"> This is default body! </slot>
             <div class="field">
               <label for="" class="label">Equipment Type</label>
               <div class="control">
@@ -29,9 +28,7 @@
                     id=""
                     v-model="form.Equipment"
                   >
-                    <option value="" disabled="disabled">
-                      Nothing Selected
-                    </option>
+                    <option value="" disabled="disabled">Please Select</option>
                     <!-- Generate Drop Down Menu !-->
                     <option
                       v-for="option in options.eqpmntType"
@@ -41,6 +38,17 @@
                       {{ option.text }}
                     </option>
                   </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Make</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Equipment Maker"
+                    v-model="form.Make"
+                  />
                 </div>
               </div>
 
@@ -88,24 +96,39 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label class="label">Condition</label>
-                <div class="control">
-                  <input
-                    class="input"
-                    placeholder="Condition"
+              <label for="" class="label">Condition</label>
+              <div class="control">
+                <div class="select">
+                  <select
+                    name="
+                "
+                    id=""
                     v-model="form.Condition"
-                  />
+                  >
+                    <option value="" disabled="disabled">Please Select</option>
+                    <!-- Generate Drop Down Menu !-->
+                    <option
+                      v-for="condition in conditions.conditionType"
+                      :value="condition.value"
+                      :key="condition.value"
+                    >
+                      {{ condition.text }}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
 
             <div class="field is-grouped">
               <div class="control">
-                <button class="button is-primary">Submit</button>
+                <button @click="updateUI" class="button is-primary">
+                  Submit
+                </button>
               </div>
             </div>
           </form>
+
+          <p v-if="message">Added {{ message }} Successful!</p>
         </section>
 
         <!-- ======================================================== !-->
@@ -128,10 +151,10 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits, toRefs } from "vue";
+import { reactive, defineEmits, ref, toRaw } from "vue";
 import addRow from "../helperFunctions/addRow.js";
 
-// Variables
+// ========== Variables ================ //
 let form = reactive({
   Equipment: "",
   Make: "",
@@ -143,42 +166,56 @@ let form = reactive({
 });
 const options = reactive({
   eqpmntType: [
-    { value: "laptops", text: "Laptops" },
-    { value: "iPads", text: "iPads" },
-    { value: "docCamera", text: "Document Camera" },
-    { value: "projector", text: "Overhead Projector" },
-    { value: "scanner", text: "Scanner" },
-    { value: "macbooks", text: "MacBooks" },
-    { value: "chromebooks", text: "Chromebooks" },
-    { value: "desktops", text: "Desktops" },
+    { value: "Laptop", text: "Laptop" },
+    { value: "iPad", text: "iPad" },
+    { value: "Document Camera", text: "Document Camera" },
+    { value: "Overhead Projector", text: "Overhead Projector" },
+    { value: "Scanner", text: "Scanner" },
+    { value: "MacBook", text: "MacBook" },
+    { value: "Chromebook", text: "Chromebook" },
+    { value: "Desktop", text: "Desktop" },
   ],
 });
 
-const formArray = [];
-const testArray = [
-  {
-    Equipment: "Laptop",
-    Make: "Dell",
-    ModelNum: "5544",
-    Barcode: "707888",
-    Condition: "Fair",
-  },
-];
+const conditions = reactive({
+  conditionType: [
+    { value: "Excellent", text: "Excellent" },
+    { value: "Good", text: "Good" },
+    { value: "Fair", text: "Fair" },
+    { value: "Poor", text: "Poor" },
+  ],
+});
+
+let formArray = [];
+let message = ref("");
 
 // Setup an event-emmiter that is listened for on App.vue @close event-listener
-const emit = defineEmits(["close"]);
+// Also a event-emitter that is listened for on Display-Scrap.vue to update the
+// UI when a row is added to SS.
+const emit = defineEmits(["close", "updateUI"]);
 const close = () => {
   emit("close");
 };
 
-// ========= Methods ================ //
-const submitForm = function () {
-  const formAsPlainObject = toRefs(form);
-  formArray.push(formAsPlainObject);
-  console.log(formArray);
-  console.log(testArray);
+const updateUI = () => {
+  emit("updateUI");
+};
 
-  addRow(testArray);
+// ========= Methods ================ //
+const submitForm = async () => {
+  //=== Vars ==== //
+  let formAsPlainObject = toRaw(form); // Strip out Proxy
+  let response = {};
+
+  // Push the Form contents onto the formArray[]
+  formArray.push(formAsPlainObject);
+
+  // Submit form to Google sheets via Stein
+  response = await addRow(formArray);
+  message.value = response.updatedRange;
+
+  // Update UI by pushing row onto oEquiptByType
+  //oEquiptByType[row[0]["Equipment"]].push(row[0]);
 };
 </script>
 

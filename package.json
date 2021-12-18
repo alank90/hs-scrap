@@ -9,7 +9,7 @@
   "dependencies": {
     "bulma": "^0.9.3",
     "stein-js-client": "^0.0.2",
-    "vue": "^3.2.21"
+    "vue": "^3.2.26"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.4",

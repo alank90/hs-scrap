@@ -5,10 +5,14 @@ const store = new SteinStore(
 );
 var response = "";
 
-const addRow = async function (row) {
-  console.log(row[0]["Equipment"]);
+const deleteRow = async (row) => {
+  // get the row ID stored in data-id attr
+  const rowID = row.dataset.id;
+
   await store
-    .append("HS - Classrooms", row)
+    .delete("HS - Classrooms", {
+      search: { ID: rowID },
+    })
     .then((res) => {
       response = res;
     })
@@ -19,4 +23,4 @@ const addRow = async function (row) {
   return response;
 };
 
-export default addRow;
+export default deleteRow;
