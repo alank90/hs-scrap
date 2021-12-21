@@ -35,8 +35,9 @@
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref } from "vue";
-import DisplayScrap from "./components/display-scrap.vue";
 import FormModal from "./components/form-modal.vue";
+import DisplayScrap from "./components/display-scrap.vue";
+
 
 // Variable Declarations
 let isModalVisible = ref(false);
@@ -86,10 +87,10 @@ img[alt="Scrap"] {
   top: 0;
   right: 0;
   margin-right: 3px;
-  transition: color .6s ease-in; 
+  transition: color 0.6s ease-in;
 }
 .sheets-link:hover {
-    color: rgb(183, 230, 183);
+  color: rgb(183, 230, 183);
 }
 
 .btn {

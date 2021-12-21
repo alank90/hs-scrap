@@ -121,7 +121,7 @@
 
             <div class="field is-grouped">
               <div class="control">
-                <button @click="updateUI" class="button is-primary">
+                <button @click="handleUpdateUI" class="button is-primary">
                   Submit
                 </button>
               </div>
@@ -195,10 +195,6 @@ let message = ref("");
 const emit = defineEmits(["close", "updateUI"]);
 const close = () => {
   emit("close");
-};
-
-const updateUI = () => {
-  emit("updateUI");
 };
 
 // ========= Methods ================ //
