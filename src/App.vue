@@ -38,7 +38,6 @@ import { ref } from "vue";
 import FormModal from "./components/form-modal.vue";
 import DisplayScrap from "./components/display-scrap.vue";
 
-
 // Variable Declarations
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
