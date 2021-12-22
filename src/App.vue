@@ -1,6 +1,10 @@
 <template>
   <!-- ============== Modal Component ============= -->
-  <FormModal v-show="isModalVisible" @close="closeModal">
+  <FormModal
+    v-show="isModalVisible"
+    @close="closeModal"
+    @emiterUIUpdate="updateUI"
+  >
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </FormModal>
 
@@ -28,21 +32,22 @@
     </div>
   </div>
 
-  <DisplayScrap />
+  <DisplayScrap :propFormData="formData" />
 </template>
 
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import FormModal from "./components/form-modal.vue";
 import DisplayScrap from "./components/display-scrap.vue";
 
-// Variable Declarations
+// ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
+let formData = reactive({});
 
-// Methods
+// ========== Methods ====================== //
 const showModal = () => {
   isModalVisible.value = true;
   isButtonVisible.value = false;
@@ -50,6 +55,16 @@ const showModal = () => {
 const closeModal = () => {
   isModalVisible.value = false;
   isButtonVisible.value = true;
+};
+
+// Method to be called when there is an emiterUIUpdate event emiited
+// from form-modal.vue @param(data) is the form data sent from the
+// form submission via the event bus. We will then send this data back
+// down to child display-scrap component via a prop.
+const updateUI = (data) => {
+  console.log("emitter for updateUI");
+  formData.value = data;
+  console.log(formData.value);
 };
 </script>
 

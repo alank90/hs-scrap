@@ -121,7 +121,7 @@
 
             <div class="field is-grouped">
               <div class="control">
-                <button @click="handleUpdateUI" class="button is-primary">
+                <button @click="sendUIUpdate" class="button is-primary">
                   Submit
                 </button>
               </div>
@@ -189,12 +189,16 @@ const conditions = reactive({
 let formArray = [];
 let message = ref("");
 
-// Setup an event-emmiter that is listened for on App.vue @close event-listener
-// Also a event-emitter that is listened for on Display-Scrap.vue to update the
+// Setup an event-emiter that is listened for on App.vue @close event-listener
+// Also a event-emiter that is listened for on Display-Scrap.vue to update the
 // UI when a row is added to SS.
-const emit = defineEmits(["close", "updateUI"]);
+const emit = defineEmits(["close", "emiterUIUpdate"]);
 const close = () => {
   emit("close");
+};
+
+const sendUIUpdate = () => {
+  emit("emiterUIUpdate", toRaw(form));
 };
 
 // ========= Methods ================ //
@@ -209,9 +213,6 @@ const submitForm = async () => {
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
-
-  // Update UI by pushing row onto oEquiptByType
-  //oEquiptByType[row[0]["Equipment"]].push(row[0]);
 };
 </script>
 

@@ -6,7 +6,6 @@ const store = new SteinStore(
 var response = "";
 
 const addRow = async function (row) {
-  console.log(row[0]["Equipment"]);
   await store
     .append("HS - Classrooms", row)
     .then((res) => {
