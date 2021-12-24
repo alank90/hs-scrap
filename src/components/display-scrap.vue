@@ -76,10 +76,10 @@ let oEquiptByType = reactive({
 
 // ======== Props =========== //
 const props = defineProps({
-  propFormData: {}
-})
+  propFormData: {},
+});
 
-console.log(props.propFormData);
+//console.log(props.propFormData);
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -89,6 +89,12 @@ let emptyRowsRemoved = computed(() =>
     (item) => item["Equipment"] || item["Make"]
   )
 );
+
+// ======= Watch effects =================== //
+/* watch(props.propFormData, (currentValue, oldValue) => {
+  console.log(currentValue);
+  console.log(oldValue);
+}); */
 
 // ============ Methods ====================== //
 
