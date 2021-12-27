@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, defineProps } from "vue";
+import { ref, reactive, watch, computed, onMounted, defineProps } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -79,8 +79,6 @@ const props = defineProps({
   propFormData: {},
 });
 
-//console.log(props.propFormData);
-
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
@@ -91,10 +89,21 @@ let emptyRowsRemoved = computed(() =>
 );
 
 // ======= Watch effects =================== //
-/* watch(props.propFormData, (currentValue, oldValue) => {
-  console.log(currentValue);
-  console.log(oldValue);
-}); */
+// Important: Notice we had to use value returned from function
+// props.propFormData as the first(watched variable)
+// parameter to give us the right property to watch for in watch().
+watch(
+  () => props.propFormData,
+  (currentValue, oldValue) => {
+    console.log(props.propFormData);
+    console.log(currentValue);
+    // Push the submitted form item onto the reactive
+    // oEquiptByType object array
+    oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
+
+    // Have to figure out how to update Display for multiple entries
+  }
+);
 
 // ============ Methods ====================== //
 

@@ -45,7 +45,7 @@ import DisplayScrap from "./components/display-scrap.vue";
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
-var formData = ref({});
+let formData = ref({});
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -62,11 +62,7 @@ const closeModal = () => {
 // form submission via the event bus. We will then send this data back
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
-  console.log("emitter for updateUI");
-
   formData.value = data;
-
-  console.log("App FormData is", formData.value);
 };
 </script>
 

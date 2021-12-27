@@ -208,11 +208,19 @@ const submitForm = async () => {
   let response = {};
 
   // Push the Form contents onto the formArray[]
+  // Need to do this because stein expects the form data to
+  // be in an array. So we have to wrap form variable in an array
   formArray.push(formAsPlainObject);
 
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
+
+  // Now we pop the form array data entry off in case
+  // there are multiple entries submitted on same instance
+  // of the form. Also clear the formAsPlainObject var.
+  formArray.pop();
+  formAsPlainObject = {};
 };
 </script>
 
