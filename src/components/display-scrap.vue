@@ -89,21 +89,14 @@ let emptyRowsRemoved = computed(() =>
 );
 
 // ======= Watch effects =================== //
-// Important: Notice we had to use value returned from function
-// props.propFormData as the first(watched variable)
-// parameter to give us the right property to watch for in watch().
-watch(
-  () => props.propFormData,
-  (currentValue, oldValue) => {
-    console.log(props.propFormData);
-    console.log(currentValue);
-    // Push the submitted form item onto the reactive
-    // oEquiptByType object array
-    oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
+watch(props.propFormData, () => {
+  console.log(oEquiptByType[props.propFormData.Equipment]);
+  // Push the submitted form item onto the reactive
+  // oEquiptByType object array
+  oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
 
-    // Have to figure out how to update Display for multiple entries
-  }
-);
+  // Have to figure out how to update Display for multiple entries
+});
 
 // ============ Methods ====================== //
 

@@ -38,14 +38,14 @@
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import FormModal from "./components/form-modal.vue";
 import DisplayScrap from "./components/display-scrap.vue";
 
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
-let formData = ref({});
+const formData = reactive({});
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -62,7 +62,7 @@ const closeModal = () => {
 // form submission via the event bus. We will then send this data back
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
-  formData.value = data;
+  Object.assign(formData, data);
 };
 </script>
 

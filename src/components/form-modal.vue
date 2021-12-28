@@ -154,7 +154,7 @@
 import { reactive, defineEmits, ref, toRaw } from "vue";
 import addRow from "../helperFunctions/addRow.js";
 
-// ========== Variables ================ //
+// ================ Variables ================================== //
 let form = reactive({
   Equipment: "",
   Make: "",
@@ -164,6 +164,17 @@ let form = reactive({
   Location: "",
   Condition: "",
 });
+
+const emptyForm = reactive({
+  Equipment: "",
+  Make: "",
+  ModelNum: "",
+  Barcode: "",
+  SerialNum: "",
+  Location: "",
+  Condition: "",
+});
+
 const options = reactive({
   eqpmntType: [
     { value: "Laptop", text: "Laptop" },
@@ -189,6 +200,8 @@ const conditions = reactive({
 let formArray = [];
 let message = ref("");
 
+// =================== Event Emitters ============================= //
+
 // Setup an event-emiter that is listened for on App.vue @close event-listener
 // Also a event-emiter that is listened for on Display-Scrap.vue to update the
 // UI when a row is added to SS.
@@ -201,7 +214,7 @@ const sendUIUpdate = () => {
   emit("emiterUIUpdate", toRaw(form));
 };
 
-// ========= Methods ================ //
+// ================== Methods ================================ //
 const submitForm = async () => {
   //=== Vars ==== //
   let formAsPlainObject = toRaw(form); // Strip out Proxy
@@ -220,7 +233,8 @@ const submitForm = async () => {
   // there are multiple entries submitted on same instance
   // of the form. Also clear the formAsPlainObject var.
   formArray.pop();
-  formAsPlainObject = {};
+  // Clear the form
+  Object.assign(form, emptyForm);
 };
 </script>
 
