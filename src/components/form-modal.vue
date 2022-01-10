@@ -153,6 +153,7 @@
 <script setup>
 import { reactive, defineEmits, ref, toRaw } from "vue";
 import addRow from "../helperFunctions/addRow.js";
+import createID from "../helperFunctions/createID.js";
 
 // ================ Variables ================================== //
 let form = reactive({
@@ -219,6 +220,13 @@ const submitForm = async () => {
   //=== Vars ==== //
   let formAsPlainObject = toRaw(form); // Strip out Proxy
   let response = {};
+
+  // Create a unique ID for SS entry to go in the ID column.
+  // Then add it to formAsPlainObject. The ID will be used
+  // when we want to delete a row from SS.
+  const ID = createID(formAsPlainObject);
+  formAsPlainObject.ID = ID;
+  console.log(formAsPlainObject);
 
   // Push the Form contents onto the formArray[]
   // Need to do this because stein expects the form data to
