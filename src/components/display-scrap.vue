@@ -91,9 +91,20 @@ let emptyRowsRemoved = computed(() =>
 // ======= Watch effects =================== //
 watch(props.propFormData, () => {
   // Push the submitted form item onto the reactive
-  // oEquiptByType object array. This update of Vue state 
+  // oEquiptByType object array. This update of Vue state
   // will then be injected into DOM and automagically update browser display.
+  console.log("propsFormData is:", props.propFormData);
+  console.log(
+    "oEqptBytype array before push is:",
+    oEquiptByType[props.propFormData.Equipment]
+  );
+
   oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
+
+  console.log(
+    "oEqptBytype array after the push is:",
+    oEquiptByType[props.propFormData.Equipment]
+  );
 });
 
 // ============ Methods ====================== //

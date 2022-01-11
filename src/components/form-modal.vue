@@ -121,9 +121,7 @@
 
             <div class="field is-grouped">
               <div class="control">
-                <button @click="sendUIUpdate" class="button is-primary">
-                  Submit
-                </button>
+                <button class="button is-primary">Submit</button>
               </div>
             </div>
           </form>
@@ -164,6 +162,7 @@ let form = reactive({
   SerialNum: "",
   Location: "",
   Condition: "",
+  ID: "",
 });
 
 const emptyForm = reactive({
@@ -174,6 +173,7 @@ const emptyForm = reactive({
   SerialNum: "",
   Location: "",
   Condition: "",
+  ID: "",
 });
 
 const options = reactive({
@@ -211,10 +211,6 @@ const close = () => {
   emit("close");
 };
 
-const sendUIUpdate = () => {
-  emit("emiterUIUpdate", toRaw(form));
-};
-
 // ================== Methods ================================ //
 const submitForm = async () => {
   //=== Vars ==== //
@@ -226,7 +222,6 @@ const submitForm = async () => {
   // when we want to delete a row from SS.
   const ID = createID(formAsPlainObject);
   formAsPlainObject.ID = ID;
-  console.log(formAsPlainObject);
 
   // Push the Form contents onto the formArray[]
   // Need to do this because stein expects the form data to
@@ -236,6 +231,8 @@ const submitForm = async () => {
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
+
+  emit("emiterUIUpdate", formAsPlainObject);
 
   // Now we pop the form array data entry off in case
   // there are multiple entries submitted on same instance
