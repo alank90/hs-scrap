@@ -153,7 +153,9 @@ import { reactive, defineEmits, ref, toRaw } from "vue";
 import addRow from "../helperFunctions/addRow.js";
 import createID from "../helperFunctions/createID.js";
 
-// ================ Variables ================================== //
+// ================================================================ //
+// =================== Variables ================================== //
+// ================================================================ //
 let form = reactive({
   Equipment: "",
   Make: "",
@@ -176,7 +178,7 @@ const emptyForm = reactive({
   ID: "",
 });
 
-const options = reactive({
+const options = {
   eqpmntType: [
     { value: "Laptop", text: "Laptop" },
     { value: "iPad", text: "iPad" },
@@ -187,21 +189,27 @@ const options = reactive({
     { value: "Chromebook", text: "Chromebook" },
     { value: "Desktop", text: "Desktop" },
   ],
-});
+};
 
-const conditions = reactive({
+const conditions = {
   conditionType: [
     { value: "Excellent", text: "Excellent" },
     { value: "Good", text: "Good" },
     { value: "Fair", text: "Fair" },
     { value: "Poor", text: "Poor" },
   ],
-});
+};
 
 let formArray = [];
 let message = ref("");
 
+// ================================================================ //
+// ================= End of Variables ============================= //
+// ================================================================ //
+
+// ================================================================ //
 // =================== Event Emitters ============================= //
+// ================================================================ //
 
 // Setup an event-emiter that is listened for on App.vue @close event-listener
 // Also a event-emiter that is listened for on Display-Scrap.vue to update the
@@ -210,8 +218,13 @@ const emit = defineEmits(["close", "emiterUIUpdate"]);
 const close = () => {
   emit("close");
 };
+// ================================================================ //
+// ================== End Event Emitters ========================== //
+// ================================================================ //
 
-// ================== Methods ================================ //
+// ================================================================ //
+// ======================= Methods ================================ //
+// ================================================================ //
 const submitForm = async () => {
   //=== Vars ==== //
   let formAsPlainObject = toRaw(form); // Strip out Proxy
@@ -241,6 +254,9 @@ const submitForm = async () => {
   // Clear the form
   Object.assign(form, emptyForm);
 };
+// ================================================================ //
+// ======================= End of Methods ========================= //
+// ================================================================ //
 </script>
 
 <style scoped>

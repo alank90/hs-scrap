@@ -63,6 +63,8 @@ const closeModal = () => {
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
   Object.assign(formData, data);
+  console.log("formdata is: ", formData);
+  console.log("data is : ", data);
 };
 </script>
 

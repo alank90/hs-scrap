@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted, defineProps } from "vue";
+import { ref, reactive, watch, computed, onMounted, defineProps,toRaw } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -88,26 +88,27 @@ let emptyRowsRemoved = computed(() =>
   )
 );
 
-// ======= Watch effects =================== //
+// ================================================================ //
+// ======================= Watch effects ========================== //
+// ================================================================ //
 watch(props.propFormData, () => {
   // Push the submitted form item onto the reactive
   // oEquiptByType object array. This update of Vue state
   // will then be injected into DOM and automagically update browser display.
-  console.log("propsFormData is:", props.propFormData);
-  console.log(
-    "oEqptBytype array before push is:",
-    oEquiptByType[props.propFormData.Equipment]
-  );
+  const formData = toRaw(props.propFormData);
 
-  oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
+  console.log("In watch. The form data is: ", formData);
 
-  console.log(
-    "oEqptBytype array after the push is:",
-    oEquiptByType[props.propFormData.Equipment]
-  );
+  oEquiptByType[formData.Equipment].push(formData);
+
 });
+// ================================================================ //
+// ======================= End Watch ============================== //
+// ================================================================ //
 
-// ============ Methods ====================== //
+// ================================================================ //
+// ================================= Methods ====================== //
+// ================================================================ //
 
 // Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
@@ -143,9 +144,12 @@ const fetchSheetsData = function () {
     });
 };
 
+// =============== Called on component mount =============================== //
 onMounted(fetchSheetsData);
 
-// Called when trash can clicked on the page
+// ================================================================ //
+// ===== Called when trash can clicked on the page ================ //
+// ================================================================ //
 const removeRow = async (e) => {
   let result = confirm("Are you sure?");
   if (result) {
@@ -155,8 +159,13 @@ const removeRow = async (e) => {
     message.value = true;
   }
 };
+// ================================================================ //
+// ====================== End removeRow =========================== //
+// ================================================================ //
 
-// ========== End of Methods ====================== //
+// ================================================================ //
+// ========================== End of Methods ====================== //
+// ================================================================ //
 </script>
 
 <style scoped>
