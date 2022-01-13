@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted, defineProps,toRaw } from "vue";
+import { ref, reactive, watch, computed, onMounted, defineProps } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -95,12 +95,7 @@ watch(props.propFormData, () => {
   // Push the submitted form item onto the reactive
   // oEquiptByType object array. This update of Vue state
   // will then be injected into DOM and automagically update browser display.
-  const formData = toRaw(props.propFormData);
-
-  console.log("In watch. The form data is: ", formData);
-
-  oEquiptByType[formData.Equipment].push(formData);
-
+  oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
 });
 // ================================================================ //
 // ======================= End Watch ============================== //
