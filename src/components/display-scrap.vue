@@ -95,6 +95,7 @@ watch(props.propFormData, () => {
   // Push the submitted form item onto the reactive
   // oEquiptByType object array. This update of Vue state
   // will then be injected into DOM and automagically update browser display.
+  console.log("props: ", JSON.stringify(props.propFormData));
   oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
 });
 // ================================================================ //
