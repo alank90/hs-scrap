@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <DisplayScrap :propFormData="formData" />
+  <DisplayScrap :propFormData="formDataHistory" />
 </template>
 
 <script setup>
@@ -45,8 +45,8 @@ import DisplayScrap from "./components/display-scrap.vue";
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
-const formData = reactive({});
-
+// const formData = reactive({});
+let formDataHistory = ref([]);
 // ========== Methods ====================== //
 const showModal = () => {
   isModalVisible.value = true;
@@ -62,7 +62,9 @@ const closeModal = () => {
 // form submission via the event bus. We will then send this data back
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
-  Object.assign(formData, data);
+  formDataHistory.value.push(data);
+  console.log(formDataHistory);
+  
 };
 </script>
 
