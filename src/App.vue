@@ -47,6 +47,7 @@ let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
 // const formData = reactive({});
 let formDataHistory = ref([]);
+
 // ========== Methods ====================== //
 const showModal = () => {
   isModalVisible.value = true;
@@ -63,7 +64,7 @@ const closeModal = () => {
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
   formDataHistory.value.push(data);
-  console.log(formDataHistory);
+  
   
 };
 </script>

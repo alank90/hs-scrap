@@ -73,6 +73,7 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
+let indexLast = 0;
 
 // ======== Props =========== //
 const props = defineProps({
@@ -95,8 +96,12 @@ watch(props.propFormData, () => {
   // Push the submitted form item onto the reactive
   // oEquiptByType object array. This update of Vue state
   // will then be injected into DOM and automagically update browser display.
-  console.log("props: ", JSON.stringify(props.propFormData));
-  oEquiptByType[props.propFormData.Equipment].push(props.propFormData);
+  indexLast = props.propFormData.length - 1;
+  console.log(props.propFormData[indexLast].Equipment);
+  console.log(oEquiptByType[props.propFormData[indexLast].Equipment]);
+  oEquiptByType[props.propFormData[indexLast].Equipment].push(
+    props.propFormData[indexLast]
+  );
 });
 // ================================================================ //
 // ======================= End Watch ============================== //

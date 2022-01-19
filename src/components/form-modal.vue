@@ -244,7 +244,9 @@ const submitForm = async () => {
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
-
+  
+  // On form submit let's send form data to App.vue so
+  // we then send it back down to Display-Scrap.vue via a prop
   emit("emiterUIUpdate", formAsPlainObject);
 
   // Now we pop the form array data entry off in case
@@ -252,7 +254,7 @@ const submitForm = async () => {
   // of the form. Also clear the formAsPlainObject var.
   formArray.pop();
   // Clear the form
-  Object.assign(form, emptyForm);
+  //Object.assign(form, emptyForm);
 };
 // ================================================================ //
 // ======================= End of Methods ========================= //
