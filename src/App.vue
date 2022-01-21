@@ -32,13 +32,16 @@
     </div>
   </div>
 
-  <DisplayScrap :propFormData="formDataHistory" />
+  <DisplayScrap
+    :propFormData="formDataHistory"
+    :propFormWasSubmited="formWasSubmited"
+  />
 </template>
 
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import FormModal from "./components/form-modal.vue";
 import DisplayScrap from "./components/display-scrap.vue";
 
@@ -47,6 +50,7 @@ let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
 // const formData = reactive({});
 let formDataHistory = ref([]);
+let formWasSubmited = ref(false);
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -64,8 +68,9 @@ const closeModal = () => {
 // down to child display-scrap component via a prop.
 const updateUI = (data) => {
   formDataHistory.value.push(data);
-  
-  
+
+  formWasSubmited.value = !formWasSubmited.value;
+  console.log(formWasSubmited.value);
 };
 </script>
 

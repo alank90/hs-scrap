@@ -78,6 +78,7 @@ let indexLast = 0;
 // ======== Props =========== //
 const props = defineProps({
   propFormData: {},
+  propFormWasSubmited: Number,
 });
 
 // ======== Computed Values ================== //
@@ -92,17 +93,28 @@ let emptyRowsRemoved = computed(() =>
 // ================================================================ //
 // ======================= Watch effects ========================== //
 // ================================================================ //
-watch(props.propFormData, () => {
-  // Push the submitted form item onto the reactive
-  // oEquiptByType object array. This update of Vue state
-  // will then be injected into DOM and automagically update browser display.
-  indexLast = props.propFormData.length - 1;
-  console.log(props.propFormData[indexLast].Equipment);
-  console.log(oEquiptByType[props.propFormData[indexLast].Equipment]);
-  oEquiptByType[props.propFormData[indexLast].Equipment].push(
+
+// Note. Because you are watching a prop must format first argument as
+// a function that returns the prop. Documentation states watch first
+// argument can be a array, function or Ref<T>. Other way would be to
+// convert props object using toRefs so it’s properties would be of type
+// Ref<T> and you can pass them as a 1st argument of watch
+watch(
+  () => props.propFormWasSubmited,
+  () => {
+    // Push the submitted form item onto the reactive
+    // oEquiptByType object array. This update of Vue state
+    // will then be injected into DOM and automagically update browser display.
+
+    indexLast = props.propFormData.length - 1;
+    console.log(props.propFormData[indexLast].Equipment);
+    console.log(oEquiptByType[props.propFormData[indexLast].Equipment]);
+    console.log("Hi. In watch");
+    oEquiptByType[props.propFormData[indexLast].Equipment].push(
     props.propFormData[indexLast]
   );
-});
+  }
+);
 // ================================================================ //
 // ======================= End Watch ============================== //
 // ================================================================ //
