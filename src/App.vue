@@ -69,7 +69,6 @@ const updateUI = (data) => {
   formData.value = data;
 
   formWasSubmited.value = !formWasSubmited.value;
-  console.log(formData.value);
 };
 </script>
 

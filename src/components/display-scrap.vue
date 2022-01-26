@@ -81,6 +81,8 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
+let temp = null;
+let submittedItems = [];
 
 // ======== Props =========== //
 const props = defineProps({
@@ -114,10 +116,16 @@ watch(
     // will then be injected into DOM and automagically update browser display.
 
     console.log("Hi. In watch");
-    console.log(props.propFormData);
-    let temp = toRaw(props.propFormData);
-    console.log("Temp is: ", temp);
-    oEquiptByType[props.propFormData.Equipment].push(temp);
+    submittedItems.push(toRaw(props.propFormData));
+    console.log("submittedItems:", submittedItems);
+
+    /* 
+    console.log("Temp.pop:", temp); */
+
+     /* oEquiptByType[props.propFormData.Equipment].push(temp);
+      temp.pop();
+     Object.assign(temp, {});
+    console.log(temp); */
   }
 );
 // ================================================================ //
