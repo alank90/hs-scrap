@@ -156,7 +156,7 @@ import createID from "../helperFunctions/createID.js";
 // ================================================================ //
 // =================== Variables ================================== //
 // ================================================================ //
-let form = reactive({
+let form = {
   Equipment: "",
   Make: "",
   ModelNum: "",
@@ -165,7 +165,7 @@ let form = reactive({
   Location: "",
   Condition: "",
   ID: "",
-});
+};
 
 const emptyForm = reactive({
   Equipment: "",
@@ -227,34 +227,34 @@ const close = () => {
 // ================================================================ //
 const submitForm = async () => {
   //=== Vars ==== //
-  let formAsPlainObject = toRaw(form); // Strip out Proxy
+  //let formAsPlainObject = toRaw(form); // Strip out Proxy
   let response = {};
-
+  console.log(form);
   // Create a unique ID for SS entry to go in the ID column.
   // Then add it to formAsPlainObject. The ID will be used
   // when we want to delete a row from SS.
-  const ID = createID(formAsPlainObject);
-  formAsPlainObject.ID = ID;
+  const ID = createID(form);
+  form.ID = ID;
 
   // Push the Form contents onto the formArray[]
   // Need to do this because stein expects the form data to
   // be in an array. So we have to wrap form variable in an array
-  formArray.push(formAsPlainObject);
+  formArray.push(form);
 
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
-  
+
   // On form submit let's send form data to App.vue so
   // we then send it back down to Display-Scrap.vue via a prop
-  emit("emiterUIUpdate", formAsPlainObject);
+  emit("emiterUIUpdate", form);
 
   // Now we pop the form array data entry off in case
   // there are multiple entries submitted on same instance
   // of the form. Also clear the formAsPlainObject var.
   formArray.pop();
   // Clear the form
-  //Object.assign(form, emptyForm);
+ // Object.assign(form, emptyForm);
 };
 // ================================================================ //
 // ======================= End of Methods ========================= //

@@ -54,7 +54,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted, defineProps } from "vue";
+import {
+  ref,
+  toRaw,
+  reactive,
+  watch,
+  computed,
+  onMounted,
+  defineProps,
+} from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -73,7 +81,6 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
-let indexLast = 0;
 
 // ======== Props =========== //
 const props = defineProps({
@@ -106,13 +113,11 @@ watch(
     // oEquiptByType object array. This update of Vue state
     // will then be injected into DOM and automagically update browser display.
 
-    indexLast = props.propFormData.length - 1;
-    console.log(props.propFormData[indexLast].Equipment);
-    console.log(oEquiptByType[props.propFormData[indexLast].Equipment]);
     console.log("Hi. In watch");
-    oEquiptByType[props.propFormData[indexLast].Equipment].push(
-    props.propFormData[indexLast]
-  );
+    console.log(props.propFormData);
+    let temp = toRaw(props.propFormData);
+    console.log("Temp is: ", temp);
+    oEquiptByType[props.propFormData.Equipment].push(temp);
   }
 );
 // ================================================================ //
