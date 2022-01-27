@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits, ref, toRaw } from "vue";
+import { reactive, defineEmits, ref } from "vue";
 import addRow from "../helperFunctions/addRow.js";
 import createID from "../helperFunctions/createID.js";
 
@@ -217,6 +217,10 @@ let message = ref("");
 const emit = defineEmits(["close", "emiterUIUpdate"]);
 const close = () => {
   emit("close");
+
+  // On form close let's send event to App.vue alerting that form
+  // has been closed.
+  emit("emiterUIUpdate");
 };
 // ================================================================ //
 // ================== End Event Emitters ========================== //
@@ -227,9 +231,7 @@ const close = () => {
 // ================================================================ //
 const submitForm = async () => {
   //=== Vars ==== //
-  //let formAsPlainObject = toRaw(form); // Strip out Proxy
   let response = {};
-  console.log(form);
   // Create a unique ID for SS entry to go in the ID column.
   // Then add it to formAsPlainObject. The ID will be used
   // when we want to delete a row from SS.
@@ -245,17 +247,14 @@ const submitForm = async () => {
   response = await addRow(formArray);
   message.value = response.updatedRange;
 
-  // On form submit let's send form data to App.vue so
-  // we then send it back down to Display-Scrap.vue via a prop
-  emit("emiterUIUpdate", form);
-
   // Now we pop the form array data entry off in case
   // there are multiple entries submitted on same instance
-  // of the form. Also clear the formAsPlainObject var.
+  // of the form. Also clear the form var.
   formArray.pop();
   // Clear the form
- // Object.assign(form, emptyForm);
+  Object.assign(form, emptyForm);
 };
+
 // ================================================================ //
 // ======================= End of Methods ========================= //
 // ================================================================ //

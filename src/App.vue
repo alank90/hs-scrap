@@ -32,10 +32,7 @@
     </div>
   </div>
 
-  <DisplayScrap
-    :propFormData="formData"
-    :propFormWasSubmited="formWasSubmited"
-  />
+  <DisplayScrap />
 </template>
 
 <script setup>
@@ -48,8 +45,6 @@ import DisplayScrap from "./components/display-scrap.vue";
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
-let formData = ref();
-let formWasSubmited = ref(false);
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -62,13 +57,9 @@ const closeModal = () => {
 };
 
 // Method to be called when there is an emiterUIUpdate event emiited
-// from form-modal.vue @param(data) is the form data sent from the
-// form submission via the event bus. We will then send this data back
-// down to child display-scrap component via a prop.
-const updateUI = (data) => {
-  formData.value = data;
-
-  formWasSubmited.value = !formWasSubmited.value;
+// from form-modal.vue. Refresh the page.
+const updateUI = () => {
+  window.location.reload();
 };
 </script>
 

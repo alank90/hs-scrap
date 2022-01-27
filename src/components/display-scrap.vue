@@ -54,15 +54,7 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  toRaw,
-  reactive,
-  watch,
-  computed,
-  onMounted,
-  defineProps,
-} from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -81,14 +73,6 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
-let temp = null;
-let submittedItems = [];
-
-// ======== Props =========== //
-const props = defineProps({
-  propFormData: {},
-  propFormWasSubmited: Number,
-});
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -98,39 +82,6 @@ let emptyRowsRemoved = computed(() =>
     (item) => item["Equipment"] || item["Make"]
   )
 );
-
-// ================================================================ //
-// ======================= Watch effects ========================== //
-// ================================================================ //
-
-// Note. Because you are watching a prop must format first argument as
-// a function that returns the prop. Documentation states watch first
-// argument can be a array, function or Ref<T>. Other way would be to
-// convert props object using toRefs so it’s properties would be of type
-// Ref<T> and you can pass them as a 1st argument of watch
-watch(
-  () => props.propFormWasSubmited,
-  () => {
-    // Push the submitted form item onto the reactive
-    // oEquiptByType object array. This update of Vue state
-    // will then be injected into DOM and automagically update browser display.
-
-    console.log("Hi. In watch");
-    submittedItems.push(toRaw(props.propFormData));
-    console.log("submittedItems:", submittedItems);
-
-    /* 
-    console.log("Temp.pop:", temp); */
-
-     /* oEquiptByType[props.propFormData.Equipment].push(temp);
-      temp.pop();
-     Object.assign(temp, {});
-    console.log(temp); */
-  }
-);
-// ================================================================ //
-// ======================= End Watch ============================== //
-// ================================================================ //
 
 // ================================================================ //
 // ================================= Methods ====================== //
