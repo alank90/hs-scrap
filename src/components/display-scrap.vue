@@ -31,7 +31,7 @@
         <tr v-if="item.length > 0" :key="key">
           <td class="equipt-type" colspan="8">Equipment - {{ key }}s</td>
         </tr>
-        <tr v-for="oItem in item" :key="oItem[ID]">
+        <tr v-for="(oItem, index) in item" :key="oItem[ID]">
           <td>{{ oItem["Make"] }}</td>
           <td>{{ oItem["ModelNum"] }}</td>
           <td>{{ oItem["Barcode"] }}</td>
@@ -43,6 +43,8 @@
             @click="removeRow"
             class="delete-row"
             :data-id="oItem['ID']"
+            :data-eqpmnt-type="oItem['Equipment']"
+            :data-array-position="index"
             title="Delete Row"
           >
             &#x1f5d1;
@@ -54,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, defineProps } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -73,6 +75,13 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
+
+// ============== Props ===================== //
+const props = defineProps({
+  propFormData: Object,
+});
+
+console.log("Props: ",props.propFormData);
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -130,7 +139,8 @@ onMounted(fetchSheetsData);
 const removeRow = async (e) => {
   let result = confirm("Are you sure?");
   if (result) {
-    let response = await deleteRow(e.target);
+    const eqptmntType = e.target.dataset.eqpmntType;
+    let response = await deleteRow(e.target, oEquiptByType[eqptmntType]);
     rowCount.value = response.clearedRowsCount;
   } else {
     message.value = true;

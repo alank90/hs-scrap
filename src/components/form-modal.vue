@@ -217,10 +217,6 @@ let message = ref("");
 const emit = defineEmits(["close", "emiterUIUpdate"]);
 const close = () => {
   emit("close");
-
-  // On form close let's send event to App.vue alerting that form
-  // has been closed.
-  emit("emiterUIUpdate");
 };
 // ================================================================ //
 // ================== End Event Emitters ========================== //
@@ -246,6 +242,9 @@ const submitForm = async () => {
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
+
+  // Trigger an emitter to send form data to parent App.vue component
+  emit("emiterUIUpdate", form);
 
   // Now we pop the form array data entry off in case
   // there are multiple entries submitted on same instance

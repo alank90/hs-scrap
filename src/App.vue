@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <DisplayScrap />
+  <DisplayScrap :propFormData="formData" />
 </template>
 
 <script setup>
@@ -45,6 +45,7 @@ import DisplayScrap from "./components/display-scrap.vue";
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
+let formData = null;
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -58,8 +59,11 @@ const closeModal = () => {
 
 // Method to be called when there is an emiterUIUpdate event emiited
 // from form-modal.vue. Refresh the page.
-const updateUI = () => {
-  window.location.reload();
+const updateUI = (data) => {
+  //window.location.reload();
+
+  formData = data;
+  console.log(formData);
 };
 </script>
 
