@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, defineProps } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../helperFunctions/deleteRow.js";
 
@@ -75,13 +75,6 @@ let oEquiptByType = reactive({
   MacBook: [],
   Scanner: [],
 });
-
-// ============== Props ===================== //
-const props = defineProps({
-  propFormData: Object,
-});
-
-console.log("Props: ",props.propFormData);
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS

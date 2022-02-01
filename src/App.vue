@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <DisplayScrap :propFormData="formData" />
+  <DisplayScrap :key="componentKey" />
 </template>
 
 <script setup>
@@ -45,7 +45,7 @@ import DisplayScrap from "./components/display-scrap.vue";
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
-let formData = null;
+let componentKey = ref(0);
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -59,11 +59,12 @@ const closeModal = () => {
 
 // Method to be called when there is an emiterUIUpdate event emiited
 // from form-modal.vue. Refresh the page.
-const updateUI = (data) => {
-  //window.location.reload();
-
-  formData = data;
-  console.log(formData);
+const updateUI = () => {
+  // Key-changing to force re-renders of component Display-Scrap.vue.
+  // Every time upDateUI is called, our prop componentKey will change.
+  // When this happens, Vue will know that it has to destroy the component
+  // and create a new one.
+  componentKey.value += 1;
 };
 </script>
 

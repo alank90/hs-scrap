@@ -70,6 +70,7 @@
                     class="input"
                     placeholder="Bar Code"
                     v-model="form.Barcode"
+                    pattern="[0-9]{6}"
                   />
                 </div>
               </div>
@@ -92,6 +93,7 @@
                     class="input"
                     placeholder="Location"
                     v-model="form.Location"
+                    required
                   />
                 </div>
               </div>
