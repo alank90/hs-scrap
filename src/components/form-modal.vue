@@ -19,7 +19,7 @@
         <section class="modal-body form" id="modalDescription">
           <form v-on:submit.prevent="submitForm()">
             <div class="field">
-              <label for="" class="label">Equipment Type</label>
+              <label for="" class="label">Equipment Type *</label>
               <div class="control">
                 <div class="select">
                   <select
@@ -64,13 +64,14 @@
               </div>
 
               <div class="field">
-                <label class="label">Bar Code</label>
+                <label class="label">Bar Code *</label>
                 <div class="control">
                   <input
                     class="input"
-                    placeholder="Bar Code"
+                    placeholder="Bar Code (Must be six digits)"
                     v-model="form.Barcode"
                     pattern="[0-9]{6}"
+                    required
                   />
                 </div>
               </div>
@@ -87,7 +88,7 @@
               </div>
 
               <div class="field">
-                <label class="label">Location</label>
+                <label class="label">Location *</label>
                 <div class="control">
                   <input
                     class="input"
@@ -126,6 +127,7 @@
                 <button class="button is-primary">Submit</button>
               </div>
             </div>
+            <p>* - Required field</p>
           </form>
 
           <p v-if="message">Added {{ message }} Successful!</p>
@@ -320,6 +322,15 @@ const submitForm = async () => {
   font-weight: bold;
   color: #2e456d;
   background: transparent;
+}
+
+button[aria-label="Close modal"] {
+  margin-top: -25px;
+}
+
+/* Input validation */
+input:not(:placeholder-shown):invalid {
+  background-color: salmon;
 }
 
 /* Transition Effect */
