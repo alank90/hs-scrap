@@ -70,7 +70,7 @@
                     class="input"
                     placeholder="Bar Code (Must be six digits)"
                     v-model="form.Barcode"
-                    pattern="[0-9]{6}"
+                    pattern="^hs[0-9]{6}|^[0-9]{6}"
                     required
                   />
                 </div>
