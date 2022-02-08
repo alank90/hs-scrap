@@ -19,7 +19,7 @@
         <section class="modal-body form" id="modalDescription">
           <form v-on:submit.prevent="submitForm()">
             <div class="field">
-              <label for="" class="label">Equipment Type</label>
+              <label for="" class="label">Equipment Type *</label>
               <div class="control">
                 <div class="select">
                   <select
@@ -28,9 +28,7 @@
                     id=""
                     v-model="form.Equipment"
                   >
-                    <option value="" disabled="disabled">
-                      Nothing Selected
-                    </option>
+                    <option value="" disabled="disabled">Please Select</option>
                     <!-- Generate Drop Down Menu !-->
                     <option
                       v-for="option in options.eqpmntType"
@@ -66,12 +64,14 @@
               </div>
 
               <div class="field">
-                <label class="label">Bar Code</label>
+                <label class="label">Bar Code *</label>
                 <div class="control">
                   <input
                     class="input"
-                    placeholder="Bar Code"
+                    placeholder="Bar Code (Must be six digits)"
                     v-model="form.Barcode"
+                    pattern="^hs[0-9]{6}|^[0-9]{6}"
+                    required
                   />
                 </div>
               </div>
@@ -88,24 +88,36 @@
               </div>
 
               <div class="field">
-                <label class="label">Location</label>
+                <label class="label">Location *</label>
                 <div class="control">
                   <input
                     class="input"
                     placeholder="Location"
                     v-model="form.Location"
+                    required
                   />
                 </div>
               </div>
 
-              <div class="field">
-                <label class="label">Condition</label>
-                <div class="control">
-                  <input
-                    class="input"
-                    placeholder="Condition"
+              <label for="" class="label">Condition</label>
+              <div class="control">
+                <div class="select">
+                  <select
+                    name="
+                "
+                    id=""
                     v-model="form.Condition"
-                  />
+                  >
+                    <option value="" disabled="disabled">Please Select</option>
+                    <!-- Generate Drop Down Menu !-->
+                    <option
+                      v-for="condition in conditions.conditionType"
+                      :value="condition.value"
+                      :key="condition.value"
+                    >
+                      {{ condition.text }}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -115,6 +127,7 @@
                 <button class="button is-primary">Submit</button>
               </div>
             </div>
+            <p>* - Required field</p>
           </form>
 
           <p v-if="message">Added {{ message }} Successful!</p>
@@ -140,11 +153,14 @@
 </template>
 
 <script setup>
-import { reactive, defineEmits, ref, toRaw } from "vue";
+import { reactive, defineEmits, ref } from "vue";
 import addRow from "../helperFunctions/addRow.js";
+import createID from "../helperFunctions/createID.js";
 
-// Variables
-let form = reactive({
+// ================================================================ //
+// =================== Variables ================================== //
+// ================================================================ //
+let form = {
   Equipment: "",
   Make: "",
   ModelNum: "",
@@ -152,45 +168,99 @@ let form = reactive({
   SerialNum: "",
   Location: "",
   Condition: "",
+  ID: "",
+};
+
+const emptyForm = reactive({
+  Equipment: "",
+  Make: "",
+  ModelNum: "",
+  Barcode: "",
+  SerialNum: "",
+  Location: "",
+  Condition: "",
+  ID: "",
 });
-const options = reactive({
+
+const options = {
   eqpmntType: [
-    { value: "laptops", text: "Laptops" },
-    { value: "iPads", text: "iPads" },
-    { value: "docCamera", text: "Document Camera" },
-    { value: "projector", text: "Overhead Projector" },
-    { value: "scanner", text: "Scanner" },
-    { value: "macbooks", text: "MacBooks" },
-    { value: "chromebooks", text: "Chromebooks" },
-    { value: "desktops", text: "Desktops" },
+    { value: "Laptop", text: "Laptop" },
+    { value: "iPad", text: "iPad" },
+    { value: "Document Camera", text: "Document Camera" },
+    { value: "Overhead Projector", text: "Overhead Projector" },
+    { value: "Scanner", text: "Scanner" },
+    { value: "MacBook", text: "MacBook" },
+    { value: "Chromebook", text: "Chromebook" },
+    { value: "Desktop", text: "Desktop" },
   ],
-});
+};
+
+const conditions = {
+  conditionType: [
+    { value: "Excellent", text: "Excellent" },
+    { value: "Good", text: "Good" },
+    { value: "Fair", text: "Fair" },
+    { value: "Poor", text: "Poor" },
+  ],
+};
 
 let formArray = [];
 let message = ref("");
 
-// Setup an event-emmiter that is listened for on App.vue @close event-listener
-const emit = defineEmits(["close"]);
+// ================================================================ //
+// ================= End of Variables ============================= //
+// ================================================================ //
+
+// ================================================================ //
+// =================== Event Emitters ============================= //
+// ================================================================ //
+
+// Setup an event-emiter that is listened for on App.vue @close event-listener
+// Also a event-emiter that is listened for on Display-Scrap.vue to update the
+// UI when a row is added to SS.
+const emit = defineEmits(["close", "emiterUIUpdate"]);
 const close = () => {
   emit("close");
 };
+// ================================================================ //
+// ================== End Event Emitters ========================== //
+// ================================================================ //
 
-// ========= Methods ================ //
+// ================================================================ //
+// ======================= Methods ================================ //
+// ================================================================ //
 const submitForm = async () => {
-  //============ Vars ================= //
-  let formAsPlainObject = toRaw(form);
-  delete formAsPlainObject.Equipment;
-
+  //=== Vars ==== //
   let response = {};
+  // Create a unique ID for SS entry to go in the ID column.
+  // Then add it to formAsPlainObject. The ID will be used
+  // when we want to delete a row from SS.
+  const ID = createID(form);
+  form.ID = ID;
 
-  // Delete the Equipment Type property before posting data to Sheets
-  formArray.push(formAsPlainObject);
-  console.log(formAsPlainObject);
+  // Push the Form contents onto the formArray[]
+  // Need to do this because stein expects the form data to
+  // be in an array. So we have to wrap form variable in an array
+  formArray.push(form);
 
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
+
+  // Trigger an emitter to send form data to parent App.vue component
+  emit("emiterUIUpdate", form);
+
+  // Now we pop the form array data entry off in case
+  // there are multiple entries submitted on same instance
+  // of the form. Also clear the form var.
+  formArray.pop();
+  // Clear the form
+  Object.assign(form, emptyForm);
 };
+
+// ================================================================ //
+// ======================= End of Methods ========================= //
+// ================================================================ //
 </script>
 
 <style scoped>
@@ -252,6 +322,15 @@ const submitForm = async () => {
   font-weight: bold;
   color: #2e456d;
   background: transparent;
+}
+
+button[aria-label="Close modal"] {
+  margin-top: -25px;
+}
+
+/* Input validation */
+input:not(:placeholder-shown):invalid {
+  background-color: salmon;
 }
 
 /* Transition Effect */

@@ -1,38 +1,53 @@
 <template>
-  <FormModal v-show="isModalVisible" @close="closeModal">
+  <!-- ============== Modal Component ============= -->
+  <FormModal
+    v-show="isModalVisible"
+    @close="closeModal"
+    @emiterUIUpdate="updateUI"
+  >
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </FormModal>
 
-  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+  <div id="main">
+    <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
-  <div id="app">
-    <transition name="button-fade">
-      <button
-        v-show="isButtonVisible"
-        @click="showModal"
-        type="button"
-        class="btn glow-on-hover"
-      >
-        Add Equipment
-      </button>
-    </transition>
+    <div class="top-container">
+      <transition name="button-fade">
+        <button
+          v-show="isButtonVisible"
+          @click="showModal"
+          type="button"
+          class="btn glow-on-hover"
+        >
+          Add Equipment
+        </button>
+      </transition>
+
+      <a
+        href="https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit#gid=0"
+        class="sheets-link"
+        target="_blank"
+        >To Google Sheets
+      </a>
+    </div>
   </div>
 
-  <DisplayScrap />
+  <DisplayScrap :key="componentKey" />
 </template>
 
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref } from "vue";
-import DisplayScrap from "./components/display-scrap.vue";
 import FormModal from "./components/form-modal.vue";
+import DisplayScrap from "./components/display-scrap.vue";
 
-// Variable Declarations
+// ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
+let componentKey = ref(0);
 
-// Methods
+// ========== Methods ====================== //
 const showModal = () => {
   isModalVisible.value = true;
   isButtonVisible.value = false;
@@ -41,20 +56,61 @@ const closeModal = () => {
   isModalVisible.value = false;
   isButtonVisible.value = true;
 };
+
+// Method to be called when there is an emiterUIUpdate event emiited
+// from form-modal.vue. Refresh the page.
+const updateUI = () => {
+  // Key-changing to force re-renders of component Display-Scrap.vue.
+  // Every time upDateUI is called, our prop componentKey will change.
+  // When this happens, Vue will know that it has to destroy the component
+  // and create a new one.
+  componentKey.value += 1;
+};
 </script>
 
 <style>
-#app {
+#main {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 
 img[alt="Scrap"] {
   border-radius: 50%;
+  display: block;
+  margin: 0 auto 30px;
+}
+
+.top-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sheets-link {
+  background-color: #34a853;
+  color: #ffffff;
+  min-width: 200px;
+  text-align: center;
+  border-radius: 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 3px;
+  transition: color 0.6s ease-in;
+}
+.sheets-link:hover {
+  color: rgb(183, 230, 183);
+}
+
+.btn {
+  margin: 1px;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 /* ========== Button Glow Stylings ========== */
