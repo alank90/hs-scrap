@@ -74,6 +74,7 @@ let oEquiptByType = reactive({
   Desktop: [],
   MacBook: [],
   Scanner: [],
+  Misc: [],
 });
 
 // ======== Computed Values ================== //
@@ -93,12 +94,13 @@ let emptyRowsRemoved = computed(() =>
 // eslint-disable-next-line no-unused-vars
 const fetchSheetsData = function () {
   const store = new SteinStore(
-    "https://api.steinhq.com/v1/storages/618e81028d29ba2379044caa"
+    "https://api.steinhq.com/v1/storages/6203d4088d29ba23791a71a0"
   );
   store
     .read("HS - Classrooms")
     .then((data) => {
       scrapDataHSClassrooms.value = data;
+
       emptyRowsRemoved.value.forEach((item) => {
         // Let's construct an object that separates equipment by type
         // Check if property exists on oEquiptByType object

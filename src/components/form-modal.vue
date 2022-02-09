@@ -160,7 +160,7 @@ import createID from "../helperFunctions/createID.js";
 // ================================================================ //
 // =================== Variables ================================== //
 // ================================================================ //
-let form = {
+let form = reactive({
   Equipment: "",
   Make: "",
   ModelNum: "",
@@ -169,7 +169,7 @@ let form = {
   Location: "",
   Condition: "",
   ID: "",
-};
+});
 
 const emptyForm = reactive({
   Equipment: "",
@@ -192,6 +192,7 @@ const options = {
     { value: "MacBook", text: "MacBook" },
     { value: "Chromebook", text: "Chromebook" },
     { value: "Desktop", text: "Desktop" },
+    { value: "Misc", text: "Misc" },
   ],
 };
 
@@ -201,6 +202,7 @@ const conditions = {
     { value: "Good", text: "Good" },
     { value: "Fair", text: "Fair" },
     { value: "Poor", text: "Poor" },
+    { value: "Scrap", text: "Scrap" },
   ],
 };
 
@@ -242,6 +244,7 @@ const submitForm = async () => {
   // Need to do this because stein expects the form data to
   // be in an array. So we have to wrap form variable in an array
   formArray.push(form);
+  console.log(formArray);
 
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);

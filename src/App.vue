@@ -24,7 +24,7 @@
       </transition>
 
       <a
-        href="https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit#gid=0"
+        href="https://docs.google.com/spreadsheets/d/1nmpXwBX6Y6Hf7ZryDN7ChOSb6FVR7D-50dTy7kpjzSE/edit#gid=0"
         class="sheets-link"
         target="_blank"
         >To Google Sheets
