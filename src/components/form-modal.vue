@@ -68,10 +68,11 @@
                 <div class="control">
                   <input
                     class="input"
-                    placeholder="Bar Code (Must be six digits)"
+                    placeholder="Must be six digits/optional hs prefix)"
                     v-model="form.Barcode"
                     pattern="^hs[0-9]{6}|^[0-9]{6}"
                     required
+                    title = "Accepts either hs123456 or 123456 as input."
                   />
                 </div>
               </div>
@@ -160,7 +161,7 @@ import createID from "../helperFunctions/createID.js";
 // ================================================================ //
 // =================== Variables ================================== //
 // ================================================================ //
-let form = reactive({
+let form = {
   Equipment: "",
   Make: "",
   ModelNum: "",
@@ -169,7 +170,7 @@ let form = reactive({
   Location: "",
   Condition: "",
   ID: "",
-});
+};
 
 const emptyForm = reactive({
   Equipment: "",
@@ -244,8 +245,7 @@ const submitForm = async () => {
   // Need to do this because stein expects the form data to
   // be in an array. So we have to wrap form variable in an array
   formArray.push(form);
-  console.log(formArray);
-
+  
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;

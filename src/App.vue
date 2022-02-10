@@ -12,6 +12,8 @@
     <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
     <div class="top-container">
+      <button @click="switchSheet">{{ currentSheet }}</button>
+
       <transition name="button-fade">
         <button
           v-show="isButtonVisible"
@@ -32,7 +34,7 @@
     </div>
   </div>
 
-  <DisplayScrap :key="componentKey" />
+  <component :is="sheetView" :key="componentKey" />
 </template>
 
 <script setup>
@@ -40,12 +42,16 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref } from "vue";
 import FormModal from "./components/form-modal.vue";
-import DisplayScrap from "./components/display-scrap.vue";
+import DisplaySheetClassrooms from "./components/displaySS/display-sheet-classrooms.vue";
+// eslint-disable-next-line no-unused-vars
+import DisplaySheetChromebooks from "./components/displaySS/display-sheet-chromebooks.vue";
 
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
 let componentKey = ref(0);
+let sheetView = DisplaySheetClassrooms;
+let currentSheet = ref("HS Classrooms");
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -65,6 +71,17 @@ const updateUI = () => {
   // When this happens, Vue will know that it has to destroy the component
   // and create a new one.
   componentKey.value += 1;
+};
+
+const switchSheet = () => {
+  if (sheetView == DisplaySheetClassrooms) {
+    console.log("sheetview changed??");
+    sheetView = DisplaySheetChromebooks;
+    currentSheet.value = "HS Chromebooks";
+  } else {
+    sheetView = DisplaySheetClassrooms;
+    currentSheet.value = "HS Classrooms";
+  }
 };
 </script>
 

@@ -58,7 +58,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../helperFunctions/deleteRow.js";
+import deleteRow from "../../helperFunctions/deleteRow.js";
 
 //======= Vars ================== //
 let scrapDataHSClassrooms = ref([]);
