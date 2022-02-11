@@ -72,7 +72,7 @@
                     v-model="form.Barcode"
                     pattern="^hs[0-9]{6}|^[0-9]{6}"
                     required
-                    title = "Accepts either hs123456 or 123456 as input."
+                    title="Accepts either hs123456 or 123456 as input."
                   />
                 </div>
               </div>
@@ -245,7 +245,7 @@ const submitForm = async () => {
   // Need to do this because stein expects the form data to
   // be in an array. So we have to wrap form variable in an array
   formArray.push(form);
-  
+
   // Submit form to Google sheets via Stein
   response = await addRow(formArray);
   message.value = response.updatedRange;
@@ -288,6 +288,7 @@ const submitForm = async () => {
   max-width: 500px;
   height: auto;
   margin: 10px auto;
+  overflow-y: scroll;
 }
 
 .modal-header,

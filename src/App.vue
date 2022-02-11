@@ -14,12 +14,13 @@
     <div class="top-container">
       <transition name="button-fade">
         <button
+          v-show="isButtonVisible"
           @click="switchSheet"
           type="button"
           class="btn glow-on-hover"
           title="Click to Change Sheet"
         >
-          Current Sheet: {{ currentSheet }}
+          Current Sheet: {{ displayedSheetName }}
         </button>
       </transition>
 
@@ -49,10 +50,9 @@
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import FormModal from "./components/form-modal.vue";
 import DisplaySheetClassrooms from "./components/displaySS/display-sheet-classrooms.vue";
-// eslint-disable-next-line no-unused-vars
 import DisplaySheetChromebooks from "./components/displaySS/display-sheet-chromebooks.vue";
 
 // ========== Variable Declarations =========== //
@@ -65,6 +65,11 @@ const components = {
   DisplaySheetChromebooks,
   DisplaySheetClassrooms,
 };
+
+// =========== Computed Properties ========== //
+const displayedSheetName = computed(() => {
+  return currentSheet.value.substring(12);
+});
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -113,9 +118,9 @@ img[alt="Scrap"] {
 }
 
 .top-container {
-  position: relative;
+  /* position: relative; */
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -126,7 +131,7 @@ img[alt="Scrap"] {
   text-align: center;
   border-radius: 15px;
   position: absolute;
-  top: 0;
+  top: 15px;
   right: 0;
   margin-right: 3px;
   transition: color 0.6s ease-in;
