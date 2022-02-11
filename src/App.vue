@@ -12,7 +12,16 @@
     <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
     <div class="top-container">
-      <button @click="switchSheet">{{ currentSheet }}</button>
+      <transition name="button-fade">
+        <button
+          @click="switchSheet"
+          type="button"
+          class="btn glow-on-hover"
+          title="Click to Change Sheet"
+        >
+          Current Sheet: {{ currentSheet }}
+        </button>
+      </transition>
 
       <transition name="button-fade">
         <button
@@ -34,7 +43,7 @@
     </div>
   </div>
 
-  <component :is="sheetView" :key="componentKey" />
+  <component :is="components[currentSheet]" :key="componentKey" />
 </template>
 
 <script setup>
@@ -50,8 +59,12 @@ import DisplaySheetChromebooks from "./components/displaySS/display-sheet-chrome
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
 let componentKey = ref(0);
-let sheetView = DisplaySheetClassrooms;
-let currentSheet = ref("HS Classrooms");
+let currentSheet = ref("DisplaySheetClassrooms");
+
+const components = {
+  DisplaySheetChromebooks,
+  DisplaySheetClassrooms,
+};
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -73,14 +86,12 @@ const updateUI = () => {
   componentKey.value += 1;
 };
 
+// Changes displayed component in UI
 const switchSheet = () => {
-  if (sheetView == DisplaySheetClassrooms) {
-    console.log("sheetview changed??");
-    sheetView = DisplaySheetChromebooks;
-    currentSheet.value = "HS Chromebooks";
+  if (currentSheet.value === "DisplaySheetClassrooms") {
+    currentSheet.value = "DisplaySheetChromebooks";
   } else {
-    sheetView = DisplaySheetClassrooms;
-    currentSheet.value = "HS Classrooms";
+    currentSheet.value = "DisplaySheetClassrooms";
   }
 };
 </script>
