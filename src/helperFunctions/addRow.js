@@ -5,10 +5,10 @@ const store = new SteinStore(
 );
 var response = "";
 
-const addRow = async function (row) {
-  console.log(row);
+const addRow = async function (row, sheetName) {
+  console.log(sheetName);
   await store
-    .append("HS - Classrooms", row)
+    .append(sheetName, row)
     .then((res) => {
       response = res;
     })

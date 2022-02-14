@@ -13,29 +13,29 @@
         </header>
 
         <!-- ======================================================== !-->
-        <!-- ============ Form starts here ========================== !-->
+        <!-- ============ Form's starts here ========================== !-->
         <!-- ======================================================== !-->
 
         <section class="modal-body form" id="modalDescription">
           <form v-on:submit.prevent="submitForm()">
             <div class="field">
-              <label for="" class="label">Equipment Type *</label>
+              <label for="" class="label">Wiped</label>
               <div class="control">
                 <div class="select">
                   <select
                     name="
                 "
                     id=""
-                    v-model="form.Equipment"
+                    v-model="form.Wiped"
                   >
                     <option value="" disabled="disabled">Please Select</option>
                     <!-- Generate Drop Down Menu !-->
                     <option
-                      v-for="option in options.eqpmntType"
-                      :value="option.value"
-                      :key="option.value"
+                      v-for="item in wiped.state"
+                      :value="item.value"
+                      :key="item.value"
                     >
-                      {{ option.text }}
+                      {{ item.text }}
                     </option>
                   </select>
                 </div>
@@ -100,25 +100,14 @@
                 </div>
               </div>
 
-              <label for="" class="label">Condition</label>
-              <div class="control">
-                <div class="select">
-                  <select
-                    name="
-                "
-                    id=""
-                    v-model="form.Condition"
-                  >
-                    <option value="" disabled="disabled">Please Select</option>
-                    <!-- Generate Drop Down Menu !-->
-                    <option
-                      v-for="condition in conditions.conditionType"
-                      :value="condition.value"
-                      :key="condition.value"
-                    >
-                      {{ condition.text }}
-                    </option>
-                  </select>
+              <div class="field">
+                <label class="label">Notes</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    placeholder="Notes"
+                    v-model="form.Notes"
+                  />
                 </div>
               </div>
             </div>
@@ -155,8 +144,8 @@
 
 <script setup>
 import { reactive, defineEmits, ref } from "vue";
-import addRow from "../helperFunctions/addRow.js";
-import createID from "../helperFunctions/createID.js";
+import addRow from "../../helperFunctions/addRow.js";
+import createID from "../../helperFunctions/createID.js";
 
 // ================================================================ //
 // =================== Variables ================================== //
@@ -168,7 +157,7 @@ let form = {
   Barcode: "",
   SerialNum: "",
   Location: "",
-  Condition: "",
+  Notes: "",
   ID: "",
 };
 
@@ -179,31 +168,14 @@ const emptyForm = reactive({
   Barcode: "",
   SerialNum: "",
   Location: "",
-  Condition: "",
+  Notes: "",
   ID: "",
 });
 
-const options = {
-  eqpmntType: [
-    { value: "Laptop", text: "Laptop" },
-    { value: "iPad", text: "iPad" },
-    { value: "Document Camera", text: "Document Camera" },
-    { value: "Overhead Projector", text: "Overhead Projector" },
-    { value: "Scanner", text: "Scanner" },
-    { value: "MacBook", text: "MacBook" },
-    { value: "Chromebook", text: "Chromebook" },
-    { value: "Desktop", text: "Desktop" },
-    { value: "Misc", text: "Misc" },
-  ],
-};
-
-const conditions = {
-  conditionType: [
-    { value: "Excellent", text: "Excellent" },
-    { value: "Good", text: "Good" },
-    { value: "Fair", text: "Fair" },
-    { value: "Poor", text: "Poor" },
-    { value: "Scrap", text: "Scrap" },
+const wiped = {
+  state: [
+    { value: "Yes", text: "Yes" },
+    { value: "No", text: "No" },
   ],
 };
 
@@ -235,6 +207,7 @@ const close = () => {
 const submitForm = async () => {
   //=== Vars ==== //
   let response = {};
+  const sheetName = "HS - Chromebooks"
   // Create a unique ID for SS entry to go in the ID column.
   // Then add it to formAsPlainObject. The ID will be used
   // when we want to delete a row from SS.
@@ -247,7 +220,7 @@ const submitForm = async () => {
   formArray.push(form);
 
   // Submit form to Google sheets via Stein
-  response = await addRow(formArray);
+  response = await addRow(formArray, sheetName);
   message.value = response.updatedRange;
 
   // Trigger an emitter to send form data to parent App.vue component

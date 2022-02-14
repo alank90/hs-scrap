@@ -13,7 +13,7 @@
   <!-- ============== Begin Table Markup ================= !-->
   <table>
     <caption>
-      SHS Scrap Table
+      SHS Scrap 2021-2022 Table
     </caption>
     <thead>
       <tr>
@@ -53,6 +53,8 @@
       </template>
     </tbody>
   </table>
+  <!-- ========= End Table Markup ================== -->
+
 </template>
 
 <script setup>
