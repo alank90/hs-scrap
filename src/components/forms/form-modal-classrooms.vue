@@ -239,7 +239,7 @@ const submitForm = async () => {
   // Create a unique ID for SS entry to go in the ID column.
   // Then add it to formAsPlainObject. The ID will be used
   // when we want to delete a row from SS.
-  const ID = createID(form);
+  const ID = createID(form["Barcode"], form["SerialNum"]);
   form.ID = ID;
 
   // Push the Form contents onto the formArray[]

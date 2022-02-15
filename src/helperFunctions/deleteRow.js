@@ -5,22 +5,23 @@ const store = new SteinStore(
 );
 var response = "";
 
-const deleteRow = async (row, eqpmntArray) => {
+const deleteRow = async (name, row, eqpmntArray) => {
   // ========= Vars ======================= //
   // get the row ID stored in data-id attr
+  console.log("Array is ", eqpmntArray);
   const rowID = row.dataset.id;
   const rowArrayPosition = row.dataset.arrayPosition;
 
   // Delete row from Google SS
   await store
-    .delete("HS - Classrooms", {
+    .delete(name, {
       search: { ID: rowID },
     })
     .then((res) => {
       response = res;
 
       // Delete row from DOM
-      eqpmntArray.splice(rowArrayPosition, 1);
+      eqpmntArray.value.splice(rowArrayPosition, 1);
     })
     .catch((e) => {
       console.error(e);

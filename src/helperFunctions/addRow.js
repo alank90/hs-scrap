@@ -6,7 +6,6 @@ const store = new SteinStore(
 var response = "";
 
 const addRow = async function (row, sheetName) {
-  console.log(sheetName);
   await store
     .append(sheetName, row)
     .then((res) => {

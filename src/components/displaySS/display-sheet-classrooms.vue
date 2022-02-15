@@ -54,7 +54,6 @@
     </tbody>
   </table>
   <!-- ========= End Table Markup ================== -->
-
 </template>
 
 <script setup>
@@ -78,6 +77,8 @@ let oEquiptByType = reactive({
   Scanner: [],
   Misc: [],
 });
+
+const sheetName = "HS - Classrooms";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -137,7 +138,11 @@ const removeRow = async (e) => {
   let result = confirm("Are you sure?");
   if (result) {
     const eqptmntType = e.target.dataset.eqpmntType;
-    let response = await deleteRow(e.target, oEquiptByType[eqptmntType]);
+    let response = await deleteRow(
+      sheetName,
+      e.target,
+      oEquiptByType[eqptmntType]
+    );
     rowCount.value = response.clearedRowsCount;
   } else {
     message.value = true;

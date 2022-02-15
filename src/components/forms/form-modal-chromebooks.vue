@@ -42,6 +42,13 @@
               </div>
 
               <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                  <input class="input" placeholder="Name" v-model="form.Name" />
+                </div>
+              </div>
+
+              <div class="field">
                 <label class="label">Make</label>
                 <div class="control">
                   <input
@@ -151,7 +158,8 @@ import createID from "../../helperFunctions/createID.js";
 // =================== Variables ================================== //
 // ================================================================ //
 let form = {
-  Equipment: "",
+  Wiped: "",
+  Name: "",
   Make: "",
   ModelNum: "",
   Barcode: "",
@@ -162,7 +170,8 @@ let form = {
 };
 
 const emptyForm = reactive({
-  Equipment: "",
+  Wiped: "",
+  Name: "",
   Make: "",
   ModelNum: "",
   Barcode: "",
@@ -181,7 +190,6 @@ const wiped = {
 
 let formArray = [];
 let message = ref("");
-
 // ================================================================ //
 // ================= End of Variables ============================= //
 // ================================================================ //
@@ -207,11 +215,11 @@ const close = () => {
 const submitForm = async () => {
   //=== Vars ==== //
   let response = {};
-  const sheetName = "HS - Chromebooks"
+  const sheetName = "HS - Chromebooks";
   // Create a unique ID for SS entry to go in the ID column.
   // Then add it to formAsPlainObject. The ID will be used
   // when we want to delete a row from SS.
-  const ID = createID(form);
+  const ID = createID(form.Barcode, form.SerialNum);
   form.ID = ID;
 
   // Push the Form contents onto the formArray[]

@@ -31,12 +31,12 @@
     <tbody>
       <tr v-for="(aItem, index) in aChromebooks" :key="aItem[ID]">
         <td>{{ aItem["High School"] }}</td>
-        <td>{{ aItem["Wiped?"] }}</td>
+        <td>{{ aItem["Wiped"] }}</td>
         <td>{{ aItem["Name"] }}</td>
         <td>{{ aItem["Make"] }}</td>
-        <td>{{ aItem["Bar Code"] }}</td>
-        <td>{{ aItem["Serial #"] }}</td>
-        <td>{{ aItem["Model #"] }}</td>
+        <td>{{ aItem["Barcode"] }}</td>
+        <td>{{ aItem["SerialNum"] }}</td>
+        <td>{{ aItem["ModelNum"] }}</td>
         <td>{{ aItem["Location"] }}</td>
         <td>{{ aItem["Notes"] }}</td>
         <td
@@ -65,14 +65,13 @@ let failure = ref(false);
 let rowCount = ref(0);
 let message = ref(false);
 let aChromebooks = ref([]);
+const sheetName = "HS - Chromebooks";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
 let emptyRowsRemoved = computed(() =>
-  scrapDataHSChromebooks.value.filter(
-    (item) => item["Bar Code"] || item["Serial #"]
-  )
+  scrapDataHSChromebooks.value.filter((item) => item.Barcode || item.SerialNum)
 );
 
 // ================================================================ //
@@ -89,6 +88,7 @@ const fetchSheetsData = function () {
     .read("HS - Chromebooks")
     .then((data) => {
       scrapDataHSChromebooks.value = data;
+      console.log(scrapDataHSChromebooks.value);
       // Push item onto aChromebooks array
       emptyRowsRemoved.value.forEach((item) => {
         aChromebooks.value.push(item);
@@ -109,8 +109,7 @@ onMounted(fetchSheetsData);
 const removeRow = async (e) => {
   let result = confirm("Are you sure?");
   if (result) {
-    const eqptmntType = e.target.dataset.eqpmntType;
-    let response = await deleteRow(e.target, aChromebooks[eqptmntType]);
+    let response = await deleteRow(sheetName, e.target, aChromebooks);
     rowCount.value = response.clearedRowsCount;
   } else {
     message.value = true;
