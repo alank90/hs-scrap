@@ -88,7 +88,6 @@ const fetchSheetsData = function () {
     .read("HS - Chromebooks")
     .then((data) => {
       scrapDataHSChromebooks.value = data;
-      console.log(scrapDataHSChromebooks.value);
       // Push item onto aChromebooks array
       emptyRowsRemoved.value.forEach((item) => {
         aChromebooks.value.push(item);

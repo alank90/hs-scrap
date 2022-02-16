@@ -31,6 +31,7 @@
           @click="showModal"
           type="button"
           class="btn glow-on-hover"
+          title="Form to Add a Row"
         >
           Add Equipment
         </button>
@@ -152,7 +153,7 @@ img[alt="Scrap"] {
 
 .btn {
   margin: 1px;
-  font-size: 1.1rem;
+  font-size: 16px;
   font-weight: 600;
 }
 
