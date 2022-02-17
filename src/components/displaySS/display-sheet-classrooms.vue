@@ -26,19 +26,31 @@
         <th>Equipment</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody @focusout="onEdit">
       <template v-for="(item, key) in oEquiptByType">
         <tr v-if="item.length > 0" :key="key">
           <td class="equipt-type" colspan="8">Equipment - {{ key }}s</td>
         </tr>
         <tr v-for="(oItem, index) in item" :key="oItem[ID]">
-          <td>{{ oItem["Make"] }}</td>
-          <td>{{ oItem["ModelNum"] }}</td>
-          <td>{{ oItem["Barcode"] }}</td>
-          <td>{{ oItem["SerialNum"] }}</td>
-          <td>{{ oItem["Location"] }}</td>
-          <td>{{ oItem["Condition"] }}</td>
-          <td>{{ oItem["Equipment"] }}</td>
+          <td contenteditable :data-col-name="'Make'">{{ oItem["Make"] }}</td>
+          <td contenteditable :data-col-name="'ModelNum'">
+            {{ oItem["ModelNum"] }}
+          </td>
+          <td contenteditable :data-col-name="'Barcode'">
+            {{ oItem["Barcode"] }}
+          </td>
+          <td contenteditable :data-col-name="'SerialNum'">
+            {{ oItem["SerialNum"] }}
+          </td>
+          <td contenteditable :data-col-name="'Location'">
+            {{ oItem["Location"] }}
+          </td>
+          <td contenteditable :data-col-name="'Condition'">
+            {{ oItem["Condition"] }}
+          </td>
+          <td contenteditable :data-col-name="'Equipment'">
+            {{ oItem["Equipment"] }}
+          </td>
           <td
             @click="removeRow"
             class="delete-row"
@@ -60,7 +72,7 @@
 import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../../helperFunctions/deleteRow.js";
-
+import editCell from "../../helperFunctions/editCell.js";
 //======= Vars ================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
@@ -79,6 +91,7 @@ let oEquiptByType = reactive({
 });
 
 const sheetName = "HS - Classrooms";
+let response = "";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -126,6 +139,26 @@ const fetchSheetsData = function () {
       console.error(e);
       failure.value = true;
     });
+};
+
+const onEdit = async (e) => {
+  const currentCell = e.target;
+  console.log("currentCell is: ", currentCell);
+  const parent = currentCell.parentNode;
+  // Get the delete-row cell
+  const lastChild = parent.lastChild;
+  // Now grab the unique data-id value for the row
+  const id = lastChild.dataset.id;
+  const colName = currentCell.dataset.colName;
+  const cellText = currentCell.textContent;
+  //console.log("The row id is: ", id);
+  /*console.log("Column name is:", colName);
+  console.log("The text is: ", text);
+  console.log("The sheetBame is: ", sheetName); */
+  // Send edited cell contents to SS
+  // Submit form to Google sheets via Stein
+  response = await editCell(id, cellText, colName, sheetName);
+  message.value = response.updatedRange;
 };
 
 // =============== Called on component mount =============================== //
