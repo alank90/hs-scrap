@@ -26,7 +26,7 @@
         <th>Equipment</th>
       </tr>
     </thead>
-    <tbody @focusout="onEdit">
+    <tbody @focusout="onEdit" @keydown.enter="endEdit">
       <template v-for="(item, key) in oEquiptByType">
         <tr v-if="item.length > 0" :key="key">
           <td class="equipt-type" colspan="8">Equipment - {{ key }}s</td>
@@ -141,9 +141,8 @@ const fetchSheetsData = function () {
     });
 };
 
-const onEdit = async (e) => {
+const onEdit = (e) => {
   const currentCell = e.target;
-  console.log("currentCell is: ", currentCell);
   const parent = currentCell.parentNode;
   // Get the delete-row cell
   const lastChild = parent.lastChild;
@@ -151,14 +150,16 @@ const onEdit = async (e) => {
   const id = lastChild.dataset.id;
   const colName = currentCell.dataset.colName;
   const cellText = currentCell.textContent;
-  //console.log("The row id is: ", id);
-  /*console.log("Column name is:", colName);
-  console.log("The text is: ", text);
-  console.log("The sheetBame is: ", sheetName); */
+
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(id, cellText, colName, sheetName);
+  response = editCell(id, cellText, colName, sheetName);
   message.value = response.updatedRange;
+};
+
+const endEdit = (e) => {
+  // Force a blur event on keyboard <enter>
+  e.target.blur();
 };
 
 // =============== Called on component mount =============================== //
