@@ -28,17 +28,27 @@
         <th>Notes</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody @focusout="onEdit" @keydown.enter="endEdit">
       <tr v-for="(aItem, index) in aChromebooks" :key="aItem[ID]">
-        <td>{{ aItem["High School"] }}</td>
-        <td>{{ aItem["Wiped"] }}</td>
-        <td>{{ aItem["Name"] }}</td>
-        <td>{{ aItem["Make"] }}</td>
-        <td>{{ aItem["Barcode"] }}</td>
-        <td>{{ aItem["SerialNum"] }}</td>
-        <td>{{ aItem["ModelNum"] }}</td>
-        <td>{{ aItem["Location"] }}</td>
-        <td>{{ aItem["Notes"] }}</td>
+        <td contenteditable :data-col-name="'High School'">
+          {{ aItem["High School"] }}
+        </td>
+        <td contenteditable :data-col-name="'Wiped'">{{ aItem["Wiped"] }}</td>
+        <td contenteditable :data-col-name="'Name'">{{ aItem["Name"] }}</td>
+        <td contenteditable :data-col-name="'Make'">{{ aItem["Make"] }}</td>
+        <td contenteditable :data-col-name="'Barcode'">
+          {{ aItem["Barcode"] }}
+        </td>
+        <td contenteditable :data-col-name="'SerialNum'">
+          {{ aItem["SerialNum"] }}
+        </td>
+        <td contenteditable :data-col-name="'ModelNum'">
+          {{ aItem["ModelNum"] }}
+        </td>
+        <td contenteditable :data-col-name="'Location'">
+          {{ aItem["Location"] }}
+        </td>
+        <td contenteditable :data-col-name="'Notes'">{{ aItem["Notes"] }}</td>
         <td
           @click="removeRow"
           class="delete-row"
@@ -58,6 +68,7 @@
 import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../../helperFunctions/deleteRow.js";
+import editCell from "../../helperFunctions/editCell.js";
 
 //======= Vars ================== //
 let scrapDataHSChromebooks = ref([]);
@@ -66,6 +77,7 @@ let rowCount = ref(0);
 let message = ref(false);
 let aChromebooks = ref([]);
 const sheetName = "HS - Chromebooks";
+let response = "";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -97,6 +109,30 @@ const fetchSheetsData = function () {
       console.error(e);
       failure.value = true;
     });
+};
+
+// Edit event listener
+const onEdit = async (e) => {
+  const currentCell = e.target;
+  const parent = currentCell.parentNode;
+  // Get the delete-row cell
+  const lastChild = parent.lastChild;
+  // Now grab the unique data-id value for the row
+  const id = lastChild.dataset.id;
+  const colName = currentCell.dataset.colName;
+  const cellText = currentCell.textContent;
+
+  // Send edited cell contents to SS
+  // Submit form to Google sheets via Stein
+  response = await editCell(id, cellText, colName, sheetName);
+
+  //message.value = response.updatedRange;
+  console.log("response is: ", response);
+};
+
+const endEdit = (e) => {
+  // Force a blur event on keyboard <enter>
+  e.target.blur();
 };
 
 // =============== Called on component mount =============================== //
