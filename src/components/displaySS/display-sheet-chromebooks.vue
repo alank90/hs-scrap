@@ -6,6 +6,10 @@
     Deleted {{ rowCount }} row. Successful &#10004;
   </p>
 
+  <p v-if="rowsUpdated > 0" class="status-message">
+    Updated {{ rowsUpdated }} row. Successful &#10004;
+  </p>
+
   <p v-if="message" class="status-message" title="Click to dismiss">
     Operation Cancelled <span @click="message = false">&#10060;</span>
   </p>
@@ -28,7 +32,7 @@
         <th>Notes</th>
       </tr>
     </thead>
-    <tbody @focusout="onEdit" @keydown.enter="endEdit">
+    <tbody @focusout="onEdit" @focusin="getCellValue" @keydown.enter="endEdit">
       <tr v-for="(aItem, index) in aChromebooks" :key="aItem[ID]">
         <td contenteditable :data-col-name="'High School'">
           {{ aItem["High School"] }}
@@ -70,11 +74,13 @@ import SteinStore from "stein-js-client";
 import deleteRow from "../../helperFunctions/deleteRow.js";
 import editCell from "../../helperFunctions/editCell.js";
 
-//======= Vars ================== //
+//======= Component Vars ========================= //
 let scrapDataHSChromebooks = ref([]);
 let failure = ref(false);
 let rowCount = ref(0);
+let rowsUpdated = ref(0);
 let message = ref(false);
+let currentCellValue = ref("");
 let aChromebooks = ref([]);
 const sheetName = "HS - Chromebooks";
 let response = "";
@@ -111,8 +117,18 @@ const fetchSheetsData = function () {
     });
 };
 
+const getCellValue = (e) => {
+  // This function simply gets contents of current cell on focusIn.
+  const currentCell = e.target;
+  currentCellValue.value = currentCell.textContent;
+};
+
 // Edit event listener
 const onEdit = async (e) => {
+  // Reinitialize rowsUpdated
+  rowsUpdated.value = 0;
+
+  // ====== Function Vars =================== //
   const currentCell = e.target;
   const parent = currentCell.parentNode;
   // Get the delete-row cell
@@ -120,17 +136,32 @@ const onEdit = async (e) => {
   // Now grab the unique data-id value for the row
   const id = lastChild.dataset.id;
   const colName = currentCell.dataset.colName;
-  const cellText = currentCell.textContent;
+  const newCellValue = currentCell.textContent;
+
+  // Check if any edit was made to cell. If not return from function.
+  if (currentCellValue.value === newCellValue) {
+    return;
+  }
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(id, cellText, colName, sheetName);
+  response = await editCell(id, newCellValue, colName, sheetName);
 
-  //message.value = response.updatedRange;
-  console.log("response is: ", response);
+  rowsUpdated.value = response.totalUpdatedRows;
 };
 
 const endEdit = (e) => {
+  // Reinitialize rowsUpdated
+  rowsUpdated.value = 0;
+
+  // ======= Function Vars =========================== //
+  const currentCell = e.target;
+  const newCellValue = currentCell.textContent;
+
+  if (currentCellValue.value === newCellValue) {
+    return;
+  }
+
   // Force a blur event on keyboard <enter>
   e.target.blur();
 };
@@ -236,9 +267,15 @@ tbody tr:nth-child(even):hover {
 }
 
 .status-message {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
   color: #069e20;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1.3rem;
   margin: 15px;
 }
 
