@@ -132,9 +132,9 @@ const onEdit = async (e) => {
   const currentCell = e.target;
   const parent = currentCell.parentNode;
   // Get the delete-row cell
-  const lastChild = parent.lastChild;
+  const cellContainingRowID = parent.lastChild;
   // Now grab the unique data-id value for the row
-  const id = lastChild.dataset.id;
+  const id = cellContainingRowID.dataset.id;
   const colName = currentCell.dataset.colName;
   const newCellValue = currentCell.textContent;
 
@@ -145,7 +145,14 @@ const onEdit = async (e) => {
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(id, newCellValue, colName, sheetName);
+  response = await editCell(
+    currentCellValue.value,
+    id,
+    newCellValue,
+    colName,
+    sheetName,
+    cellContainingRowID
+  );
 
   rowsUpdated.value = response.totalUpdatedRows;
 };

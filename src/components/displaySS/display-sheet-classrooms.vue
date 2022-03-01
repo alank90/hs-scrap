@@ -152,7 +152,6 @@ const getCellValue = (e) => {
   // This function simply gets contents of current cell on focusIn.
   const currentCell = e.target;
   currentCellValue.value = currentCell.textContent;
-  console.log("Current cell text ", currentCellValue.value);
 };
 
 const onEdit = async (e) => {
@@ -162,10 +161,11 @@ const onEdit = async (e) => {
   // ========== Function Vars ======================== //
   const currentCell = e.target;
   const parent = currentCell.parentNode;
-  // Get the delete-row cell
-  const lastChild = parent.lastChild;
+  // Get the delete-row cell which contains the row ID.
+  const cellContainingRowID = parent.lastChild;
+
   // Now grab the unique data-id value for the row
-  const id = lastChild.dataset.id;
+  const id = cellContainingRowID.dataset.id;
   const colName = currentCell.dataset.colName;
   const newCellValue = currentCell.textContent;
 
@@ -176,7 +176,14 @@ const onEdit = async (e) => {
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(id, newCellValue, colName, sheetName, lastChild);
+  response = await editCell(
+    currentCellValue.value,
+    id,
+    newCellValue,
+    colName,
+    sheetName,
+    cellContainingRowID
+  );
 
   rowsUpdated.value = response.totalUpdatedRows;
 };
@@ -190,7 +197,6 @@ const endEdit = (e) => {
   const newCellValue = currentCell.textContent;
 
   if (currentCellValue.value === newCellValue) {
-    console.log(" No change to cell text made..");
     return;
   }
   // Force a blur event on keyboard <enter>
