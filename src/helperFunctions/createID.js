@@ -1,7 +1,7 @@
-const createID = (form) => {
+const createID = (barcode, serialNumber) => {
   // First check if you have a serial number or bar code
-  if (form.Barcode || form.SerialNum) {
-    const ID = form.Barcode + form.SerialNum;
+  if (barcode || serialNumber) {
+    const ID = barcode + serialNumber;
     return ID;
   } else {
     // create the current date/time in epoch format

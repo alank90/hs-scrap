@@ -1,12 +1,13 @@
 <template>
   <!-- ============== Modal Component ============= -->
-  <FormModal
+  <component
+    :is="forms[currentForm]"
     v-show="isModalVisible"
     @close="closeModal"
     @emiterUIUpdate="updateUI"
   >
     <template v-slot:header> Add Equipment Item to Scrap List </template>
-  </FormModal>
+  </component>
 
   <div id="main">
     <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
@@ -15,16 +16,29 @@
       <transition name="button-fade">
         <button
           v-show="isButtonVisible"
+          @click="switchSheet"
+          type="button"
+          class="btn glow-on-hover"
+          title="Click to Change Sheet"
+        >
+          Current Sheet: {{ displayedSheetName }}
+        </button>
+      </transition>
+
+      <transition name="button-fade">
+        <button
+          v-show="isButtonVisible"
           @click="showModal"
           type="button"
           class="btn glow-on-hover"
+          title="Form to Add a Row"
         >
           Add Equipment
         </button>
       </transition>
 
       <a
-        href="https://docs.google.com/spreadsheets/d/1FuR46OmD4QAekAeIeksmmY2lC_iIJBsr530cwFBWyMo/edit#gid=0"
+        href="https://docs.google.com/spreadsheets/d/1nmpXwBX6Y6Hf7ZryDN7ChOSb6FVR7D-50dTy7kpjzSE/edit#gid=0"
         class="sheets-link"
         target="_blank"
         >To Google Sheets
@@ -32,20 +46,39 @@
     </div>
   </div>
 
-  <DisplayScrap :key="componentKey" />
+  <component :is="components[currentSheet]" :key="componentKey" />
 </template>
 
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref } from "vue";
-import FormModal from "./components/form-modal.vue";
-import DisplayScrap from "./components/display-scrap.vue";
+import { ref, computed } from "vue";
+import FormModalClassrooms from "./components/forms/form-modal-classrooms.vue";
+import FormModalChromebooks from "./components/forms/form-modal-chromebooks.vue";
+import DisplaySheetClassrooms from "./components/displaySS/display-sheet-classrooms.vue";
+import DisplaySheetChromebooks from "./components/displaySS/display-sheet-chromebooks.vue";
 
 // ========== Variable Declarations =========== //
 let isModalVisible = ref(false);
 let isButtonVisible = ref(true);
 let componentKey = ref(0);
+let currentSheet = ref("DisplaySheetClassrooms");
+let currentForm = ref("FormModalClassrooms");
+
+const components = {
+  DisplaySheetChromebooks,
+  DisplaySheetClassrooms,
+};
+
+const forms = {
+  FormModalChromebooks,
+  FormModalClassrooms,
+};
+
+// =========== Computed Properties ========== //
+const displayedSheetName = computed(() => {
+  return currentSheet.value.substring(12);
+});
 
 // ========== Methods ====================== //
 const showModal = () => {
@@ -66,6 +99,17 @@ const updateUI = () => {
   // and create a new one.
   componentKey.value += 1;
 };
+
+// Changes displayed component in UI
+const switchSheet = () => {
+  if (currentSheet.value === "DisplaySheetClassrooms") {
+    currentSheet.value = "DisplaySheetChromebooks";
+    currentForm.value = "FormModalChromebooks";
+  } else {
+    currentSheet.value = "DisplaySheetClassrooms";
+    currentForm.value = "FormModalClassrooms";
+  }
+};
 </script>
 
 <style>
@@ -85,9 +129,9 @@ img[alt="Scrap"] {
 }
 
 .top-container {
-  position: relative;
+  /* position: relative; */
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -98,7 +142,7 @@ img[alt="Scrap"] {
   text-align: center;
   border-radius: 15px;
   position: absolute;
-  top: 0;
+  top: 15px;
   right: 0;
   margin-right: 3px;
   transition: color 0.6s ease-in;
@@ -109,7 +153,7 @@ img[alt="Scrap"] {
 
 .btn {
   margin: 1px;
-  font-size: 1.1rem;
+  font-size: 16px;
   font-weight: 600;
 }
 

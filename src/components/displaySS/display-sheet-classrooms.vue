@@ -6,6 +6,10 @@
     Deleted {{ rowCount }} row. Successful &#10004;
   </p>
 
+  <p v-if="rowsUpdated > 0" class="status-message">
+    Updated {{ rowsUpdated }} row. Successful &#10004;
+  </p>
+
   <p v-if="message" class="status-message" title="Click to dismiss">
     Operation Cancelled <span @click="message = false">&#10060;</span>
   </p>
@@ -13,7 +17,7 @@
   <!-- ============== Begin Table Markup ================= !-->
   <table>
     <caption>
-      SHS Scrap Table
+      SHS Scrap 2021-2022 Table
     </caption>
     <thead>
       <tr>
@@ -26,19 +30,31 @@
         <th>Equipment</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody @focusout="onEdit" @focusin="getCellValue" @keydown.enter="endEdit">
       <template v-for="(item, key) in oEquiptByType">
         <tr v-if="item.length > 0" :key="key">
           <td class="equipt-type" colspan="8">Equipment - {{ key }}s</td>
         </tr>
         <tr v-for="(oItem, index) in item" :key="oItem[ID]">
-          <td>{{ oItem["Make"] }}</td>
-          <td>{{ oItem["ModelNum"] }}</td>
-          <td>{{ oItem["Barcode"] }}</td>
-          <td>{{ oItem["SerialNum"] }}</td>
-          <td>{{ oItem["Location"] }}</td>
-          <td>{{ oItem["Condition"] }}</td>
-          <td>{{ oItem["Equipment"] }}</td>
+          <td contenteditable :data-col-name="'Make'">{{ oItem["Make"] }}</td>
+          <td contenteditable :data-col-name="'ModelNum'">
+            {{ oItem["ModelNum"] }}
+          </td>
+          <td contenteditable :data-col-name="'Barcode'">
+            {{ oItem["Barcode"] }}
+          </td>
+          <td contenteditable :data-col-name="'SerialNum'">
+            {{ oItem["SerialNum"] }}
+          </td>
+          <td contenteditable :data-col-name="'Location'">
+            {{ oItem["Location"] }}
+          </td>
+          <td contenteditable :data-col-name="'Condition'">
+            {{ oItem["Condition"] }}
+          </td>
+          <td contenteditable :data-col-name="'Equipment'">
+            {{ oItem["Equipment"] }}
+          </td>
           <td
             @click="removeRow"
             class="delete-row"
@@ -53,18 +69,22 @@
       </template>
     </tbody>
   </table>
+  <!-- ========= End Table Markup ================== -->
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../helperFunctions/deleteRow.js";
+import deleteRow from "../../helperFunctions/deleteRow.js";
+import editCell from "../../helperFunctions/editCell.js";
 
-//======= Vars ================== //
+//============ Component Vars ============================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
 let rowCount = ref(0);
+let rowsUpdated = ref(0);
 let message = ref(false);
+let currentCellValue = ref("");
 let oEquiptByType = reactive({
   Laptop: [],
   iPad: [],
@@ -74,7 +94,11 @@ let oEquiptByType = reactive({
   Desktop: [],
   MacBook: [],
   Scanner: [],
+  Misc: [],
 });
+
+const sheetName = "HS - Classrooms";
+let response = "";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -85,20 +109,21 @@ let emptyRowsRemoved = computed(() =>
   )
 );
 
-// ================================================================ //
-// ================================= Methods ====================== //
-// ================================================================ //
+// ============================================================================ //
+// ================================= Methods ================================== //
+// ============================================================================ //
 
 // Now let's use Stein to retrieve the SS data
 // eslint-disable-next-line no-unused-vars
 const fetchSheetsData = function () {
   const store = new SteinStore(
-    "https://api.steinhq.com/v1/storages/618e81028d29ba2379044caa"
+    "https://api.steinhq.com/v1/storages/6203d4088d29ba23791a71a0"
   );
   store
     .read("HS - Classrooms")
     .then((data) => {
       scrapDataHSClassrooms.value = data;
+
       emptyRowsRemoved.value.forEach((item) => {
         // Let's construct an object that separates equipment by type
         // Check if property exists on oEquiptByType object
@@ -123,6 +148,61 @@ const fetchSheetsData = function () {
     });
 };
 
+const getCellValue = (e) => {
+  // This function simply gets contents of current cell on focusIn.
+  const currentCell = e.target;
+  currentCellValue.value = currentCell.textContent;
+};
+
+const onEdit = async (e) => {
+  // Reinitialize rowsUpdated
+  rowsUpdated.value = 0;
+
+  // ========== Function Vars ======================== //
+  const currentCell = e.target;
+  const parent = currentCell.parentNode;
+  // Get the delete-row cell which contains the row ID.
+  const cellContainingRowID = parent.lastChild;
+
+  // Now grab the unique data-id value for the row
+  const id = cellContainingRowID.dataset.id;
+  const colName = currentCell.dataset.colName;
+  const newCellValue = currentCell.textContent;
+
+  // Check if any edit was made to cell. If not return from function.
+  if (currentCellValue.value === newCellValue) {
+    return;
+  }
+
+  // Send edited cell contents to SS
+  // Submit form to Google sheets via Stein
+  response = await editCell(
+    currentCellValue.value,
+    id,
+    newCellValue,
+    colName,
+    sheetName,
+    cellContainingRowID
+  );
+
+  rowsUpdated.value = response.totalUpdatedRows;
+};
+
+const endEdit = (e) => {
+  // Reinitialize rowsUpdated
+  rowsUpdated.value = 0;
+
+  // ======= Function Vars =========================== //
+  const currentCell = e.target;
+  const newCellValue = currentCell.textContent;
+
+  if (currentCellValue.value === newCellValue) {
+    return;
+  }
+  // Force a blur event on keyboard <enter>
+  e.target.blur();
+};
+
 // =============== Called on component mount =============================== //
 onMounted(fetchSheetsData);
 
@@ -133,7 +213,11 @@ const removeRow = async (e) => {
   let result = confirm("Are you sure?");
   if (result) {
     const eqptmntType = e.target.dataset.eqpmntType;
-    let response = await deleteRow(e.target, oEquiptByType[eqptmntType]);
+    let response = await deleteRow(
+      sheetName,
+      e.target,
+      oEquiptByType[eqptmntType]
+    );
     rowCount.value = response.clearedRowsCount;
   } else {
     message.value = true;
@@ -225,9 +309,15 @@ tbody tr:nth-child(even):hover {
 }
 
 .status-message {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
   color: #069e20;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1.3rem;
   margin: 15px;
 }
 
