@@ -1,6 +1,20 @@
+/**
+ * This module handles the call to Stein when a cell is focused out.
+ * This module contains a Vue composable function and is used in several views.
+ * @param {string} currentCellValue - The current cell value
+ * @param {string} id - The row's id field.
+ * @param {string} updatedCellValue - The cell's new value.
+ * @param {string} colName - The column name of the cell being edited
+ * @param {string} sheetName - The sheet name of the edited cell.
+ * @param {string} cellContainingRowID - The DOM element of the last cell in the row. This
+ * contains the row ID number
+ *
+ * @return {Object} The message from Stein on operation status.
+ */
+
 import SteinStore from "stein-js-client";
 
-const editCell = async function (
+export async function useEditCell(
   currentCellValue,
   id,
   updatedCellValue,
@@ -37,7 +51,5 @@ const editCell = async function (
   if (colName === "Barcode" || colName === "SerialNum") {
     cellContainingRowID.dataset.id = newID;
   }
-  return response;
-};
-
-export default editCell;
+  return { response };
+}

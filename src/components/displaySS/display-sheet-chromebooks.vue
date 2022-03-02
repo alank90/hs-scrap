@@ -72,7 +72,7 @@
 import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
 import deleteRow from "../../helperFunctions/deleteRow.js";
-import editCell from "../../helperFunctions/editCell.js";
+import { useEditCell } from "../../helperFunctions/editCell.js";
 
 //======= Component Vars ========================= //
 let scrapDataHSChromebooks = ref([]);
@@ -83,7 +83,6 @@ let message = ref(false);
 let currentCellValue = ref("");
 let aChromebooks = ref([]);
 const sheetName = "HS - Chromebooks";
-let response = "";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -145,7 +144,7 @@ const onEdit = async (e) => {
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(
+  const { response } = await useEditCell(
     currentCellValue.value,
     id,
     newCellValue,
