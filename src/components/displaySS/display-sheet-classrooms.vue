@@ -75,9 +75,8 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../../helperFunctions/deleteRow.js";
 import { useEditCell } from "../../helperFunctions/editCell.js";
-
+import { useRemoveRow } from "../../helperFunctions/removeRow.js";
 //============ Component Vars ============================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
@@ -208,18 +207,7 @@ onMounted(fetchSheetsData);
 // ===== Called when trash can clicked on the page ================ //
 // ================================================================ //
 const removeRow = async (e) => {
-  let result = confirm("Are you sure?");
-  if (result) {
-    const eqptmntType = e.target.dataset.eqpmntType;
-    let response = await deleteRow(
-      sheetName,
-      e.target,
-      oEquiptByType[eqptmntType]
-    );
-    rowCount.value = response.clearedRowsCount;
-  } else {
-    message.value = true;
-  }
+  useRemoveRow(e, sheetName, oEquiptByType, rowCount, message);
 };
 // ================================================================ //
 // ====================== End removeRow =========================== //

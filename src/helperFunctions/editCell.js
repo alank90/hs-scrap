@@ -1,6 +1,6 @@
 /**
  * This module handles the call to Stein when a cell is focused out.
- * This module contains a Vue composable function and is used in several views.
+ * It contains a Vue composable function and is used in several views.
  * @param {string} currentCellValue - The current cell value
  * @param {string} id - The row's id field.
  * @param {string} updatedCellValue - The cell's new value.

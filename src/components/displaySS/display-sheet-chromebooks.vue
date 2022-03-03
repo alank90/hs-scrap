@@ -71,7 +71,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../../helperFunctions/deleteRow.js";
+import { useRemoveRow } from "../../helperFunctions/removeRow.js";
 import { useEditCell } from "../../helperFunctions/editCell.js";
 
 //======= Component Vars ========================= //
@@ -179,13 +179,7 @@ onMounted(fetchSheetsData);
 // ===== Called when trash can clicked on the page ================ //
 // ================================================================ //
 const removeRow = async (e) => {
-  let result = confirm("Are you sure?");
-  if (result) {
-    let response = await deleteRow(sheetName, e.target, aChromebooks);
-    rowCount.value = response.clearedRowsCount;
-  } else {
-    message.value = true;
-  }
+  useRemoveRow(e, sheetName, aChromebooks, rowCount, message);
 };
 // ================================================================ //
 // ====================== End removeRow =========================== //
