@@ -75,9 +75,8 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../../helperFunctions/deleteRow.js";
-import editCell from "../../helperFunctions/editCell.js";
-
+import { useEditCell } from "../../helperFunctions/editCell.js";
+import { useRemoveRow } from "../../helperFunctions/removeRow.js";
 //============ Component Vars ============================== //
 let scrapDataHSClassrooms = ref([]);
 let failure = ref(false);
@@ -98,8 +97,6 @@ let oEquiptByType = reactive({
 });
 
 const sheetName = "HS - Classrooms";
-let response = "";
-
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
 // eslint-disable-next-line no-unused-vars
@@ -176,7 +173,7 @@ const onEdit = async (e) => {
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(
+  const { response } = await useEditCell(
     currentCellValue.value,
     id,
     newCellValue,
@@ -210,18 +207,7 @@ onMounted(fetchSheetsData);
 // ===== Called when trash can clicked on the page ================ //
 // ================================================================ //
 const removeRow = async (e) => {
-  let result = confirm("Are you sure?");
-  if (result) {
-    const eqptmntType = e.target.dataset.eqpmntType;
-    let response = await deleteRow(
-      sheetName,
-      e.target,
-      oEquiptByType[eqptmntType]
-    );
-    rowCount.value = response.clearedRowsCount;
-  } else {
-    message.value = true;
-  }
+  useRemoveRow(e, sheetName, oEquiptByType, rowCount, message);
 };
 // ================================================================ //
 // ====================== End removeRow =========================== //

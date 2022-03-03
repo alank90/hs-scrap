@@ -71,8 +71,8 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import SteinStore from "stein-js-client";
-import deleteRow from "../../helperFunctions/deleteRow.js";
-import editCell from "../../helperFunctions/editCell.js";
+import { useRemoveRow } from "../../helperFunctions/removeRow.js";
+import { useEditCell } from "../../helperFunctions/editCell.js";
 
 //======= Component Vars ========================= //
 let scrapDataHSChromebooks = ref([]);
@@ -83,7 +83,6 @@ let message = ref(false);
 let currentCellValue = ref("");
 let aChromebooks = ref([]);
 const sheetName = "HS - Chromebooks";
-let response = "";
 
 // ======== Computed Values ================== //
 // First, Let's remove all empty rows from the SS
@@ -145,7 +144,7 @@ const onEdit = async (e) => {
 
   // Send edited cell contents to SS
   // Submit form to Google sheets via Stein
-  response = await editCell(
+  const { response } = await useEditCell(
     currentCellValue.value,
     id,
     newCellValue,
@@ -180,13 +179,7 @@ onMounted(fetchSheetsData);
 // ===== Called when trash can clicked on the page ================ //
 // ================================================================ //
 const removeRow = async (e) => {
-  let result = confirm("Are you sure?");
-  if (result) {
-    let response = await deleteRow(sheetName, e.target, aChromebooks);
-    rowCount.value = response.clearedRowsCount;
-  } else {
-    message.value = true;
-  }
+  useRemoveRow(e, sheetName, aChromebooks, rowCount, message);
 };
 // ================================================================ //
 // ====================== End removeRow =========================== //

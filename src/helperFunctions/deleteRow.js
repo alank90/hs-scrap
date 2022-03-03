@@ -6,7 +6,7 @@ const store = new SteinStore(
 );
 var response = "";
 
-const deleteRow = async (name, row, eqpmntArray) => {
+export async function useDeleteRow(name, row, eqpmntArray) {
   // ========= Vars ======================= //
   // get the row ID stored in data-id attr
   const rowID = row.dataset.id;
@@ -34,7 +34,5 @@ const deleteRow = async (name, row, eqpmntArray) => {
       console.error(e);
     });
 
-  return response;
-};
-
-export default deleteRow;
+  return { response };
+}
