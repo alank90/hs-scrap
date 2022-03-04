@@ -8,6 +8,26 @@
   >
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </component>
+  <!-- ========= End Modal Component ============= -->
+
+  <!-- ============== Auth0 login markup ============== -->
+  <div v-if="!AuthState.loading">
+    <img src="./assets/images/scrap-logo.jpg" alt="Scrap logo" />
+    <div v-if="!AuthState.isAuthenticated">
+      <button @click="login()" class="btn-login btn-login-secondary"></button>
+    </div>
+
+    <div v-else>
+      <p>
+        Welcome to HS Scrap<strong> {{ AuthState.user.name }} </strong>
+      </p>
+      <button @click="logout()" class="btn-login btn-login-secondary">Logout</button>
+    </div>
+  </div>
+
+  <div v-else>Loading...</div>
+
+  <!-- ============== End Auth0 login markup ============ -->
 
   <div id="main">
     <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
@@ -53,6 +73,7 @@
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref, computed } from "vue";
+import { useAuth0, AuthState } from "./helperFunctions/useAuth0";
 import FormModalClassrooms from "./components/forms/form-modal-classrooms.vue";
 import FormModalChromebooks from "./components/forms/form-modal-chromebooks.vue";
 import DisplaySheetClassrooms from "./components/displaySS/display-sheet-classrooms.vue";
@@ -74,6 +95,10 @@ const forms = {
   FormModalChromebooks,
   FormModalClassrooms,
 };
+
+const { login, logout, initAuth } = useAuth0(AuthState);
+
+initAuth();
 
 // =========== Computed Properties ========== //
 const displayedSheetName = computed(() => {
@@ -247,4 +272,24 @@ img[alt="Scrap"] {
     background-position: 0 0;
   }
 }
+
+/* Login Button Stylings */
+.btn-login {
+  background: #41b883;
+  color: white;
+  padding: 8px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  border: none;
+  cursor: pointer;
+  min-width: 100px;
+  min-height: auto;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+
+/* End login button stylings */
 </style>
