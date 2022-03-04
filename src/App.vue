@@ -12,16 +12,20 @@
 
   <!-- ============== Auth0 login markup ============== -->
   <div v-if="!AuthState.loading">
-    <img src="./assets/images/scrap-logo.jpg" alt="Scrap logo" />
-    <div v-if="!AuthState.isAuthenticated">
-      <button @click="login()" class="btn-login btn-login-secondary"></button>
+    <div v-if="!AuthState.isAuthenticated" class="login">
+      <img src="./assets/images/scrap-logo.jpg" alt="Scrap logo" />
+      <button @click="login()" class="btn-login btn-login-secondary">
+        Login
+      </button>
     </div>
 
     <div v-else>
       <p>
         Welcome to HS Scrap<strong> {{ AuthState.user.name }} </strong>
       </p>
-      <button @click="logout()" class="btn-login btn-login-secondary">Logout</button>
+      <button @click="logout()" class="btn-login btn-login-secondary">
+        Logout
+      </button>
     </div>
   </div>
 
@@ -275,21 +279,33 @@ img[alt="Scrap"] {
 
 /* Login Button Stylings */
 .btn-login {
+  /* display: block; */
   background: #41b883;
   color: white;
   padding: 8px 12px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
   border: none;
   cursor: pointer;
   min-width: 100px;
-  min-height: auto;
   border-radius: 4px;
   font-weight: bold;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
+img[alt="Scrap logo"] {
+  margin: 0 auto;
+}
+
+.login {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 200px;
+  margin: 0 auto;
+}
 
 /* End login button stylings */
 </style>
