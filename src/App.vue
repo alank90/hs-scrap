@@ -1,5 +1,5 @@
 <template>
-  <!-- ============== Modal Component ============= -->
+  <!-- ============== Form add equipment Modal Component ========= -->
   <component
     :is="forms[currentForm]"
     v-show="isModalVisible"
@@ -19,7 +19,7 @@
       </button>
     </div>
 
-    <div v-else>
+    <div v-else class="login">
       <p>
         Welcome to HS Scrap<strong> {{ AuthState.user.name }} </strong>
       </p>
@@ -100,9 +100,11 @@ const forms = {
   FormModalClassrooms,
 };
 
+// ========  Auth0 initialization ============== //
 const { login, logout, initAuth } = useAuth0(AuthState);
 
 initAuth();
+// =========== end Auth0 init ================== //
 
 // =========== Computed Properties ========== //
 const displayedSheetName = computed(() => {

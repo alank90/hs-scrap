@@ -1,4 +1,4 @@
-// helperFunctions/useAuth0.js
+// /helperFunctions/useAuth0.js
 import { reactive } from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
 
@@ -10,8 +10,8 @@ export const AuthState = reactive({
 });
 
 const config = {
-  domain: import.meta.VITE_AUTH0_DOMAIN,
-  clientid: import.meta.VITE_AUTH0_CLIENT_ID,
+  domain: import.meta.env.VITE_AUTH0_DOMAIN,
+  client_id: import.meta.env.VITE_AUTH0_CLIENT_ID,
 };
 
 export const useAuth0 = (state) => {
