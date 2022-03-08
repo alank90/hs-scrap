@@ -10,18 +10,22 @@
   </component>
   <!-- ========= End Modal Component ============= -->
 
+  <!-- ========== Begin Main Page Markup ==================================== -->
+  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+
   <!-- ============== Auth0 login markup ============== -->
   <div v-if="!AuthState.loading">
     <div v-if="!AuthState.isAuthenticated" class="login">
+      <h1>Welcome to HS Scrap.</h1>
       <img src="./assets/images/scrap-logo.jpg" alt="Scrap logo" />
       <button @click="login()" class="btn-login btn-login-secondary">
         Login
       </button>
     </div>
 
-    <div v-else class="login">
+    <div v-else class="logout">
       <p>
-        Welcome to HS Scrap<strong> {{ AuthState.user.name }} </strong>
+        Welcome to HS Scrap <strong> {{ AuthState.user.name }} </strong>
       </p>
       <button @click="logout()" class="btn-login btn-login-secondary">
         Logout
@@ -33,9 +37,7 @@
 
   <!-- ============== End Auth0 login markup ============ -->
 
-  <div id="main">
-    <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
-
+  <div v-if="AuthState.isAuthenticated" id="main">
     <div class="top-container">
       <transition name="button-fade">
         <button
@@ -68,9 +70,9 @@
         >To Google Sheets
       </a>
     </div>
-  </div>
 
-  <component :is="components[currentSheet]" :key="componentKey" />
+    <component :is="components[currentSheet]" :key="componentKey" />
+  </div>
 </template>
 
 <script setup>
@@ -153,10 +155,17 @@ const switchSheet = () => {
   margin-top: 20px;
 }
 
+.login > h1 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  min-width: 400px;
+  margin: 0 auto;
+}
+
 img[alt="Scrap"] {
   border-radius: 50%;
   display: block;
-  margin: 0 auto 30px;
+  margin: 15px auto 30px;
 }
 
 .top-container {
@@ -306,7 +315,11 @@ img[alt="Scrap logo"] {
   display: flex;
   flex-wrap: wrap;
   max-width: 200px;
-  margin: 0 auto;
+  margin: 15px auto;
+}
+
+.logout {
+  margin-left: 5px;
 }
 
 /* End login button stylings */
