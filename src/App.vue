@@ -1,5 +1,5 @@
 <template>
-  <!-- ============== Modal Component ============= -->
+  <!-- ============== Form add equipment Modal Component ========= -->
   <component
     :is="forms[currentForm]"
     v-show="isModalVisible"
@@ -8,10 +8,36 @@
   >
     <template v-slot:header> Add Equipment Item to Scrap List </template>
   </component>
+  <!-- ========= End Modal Component ============= -->
 
-  <div id="main">
-    <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
+  <!-- ========== Begin Main Page Markup ==================================== -->
+  <img alt="Scrap" src="./assets/images/scrap-equipment.jpg" />
 
+  <!-- ============== Auth0 login markup ============== -->
+  <div v-if="!AuthState.loading">
+    <div v-if="!AuthState.isAuthenticated" class="login">
+      <h1>Welcome to HS Scrap.</h1>
+      <img src="./assets/images/scrap-logo.jpg" alt="Scrap logo" />
+      <button @click="login()" class="btn-login btn-login-secondary">
+        Login
+      </button>
+    </div>
+
+    <div v-else class="logout">
+      <p>
+        Welcome to HS Scrap <strong> {{ AuthState.user.name }} </strong>
+      </p>
+      <button @click="logout()" class="btn-login btn-login-secondary">
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div v-else>Loading...</div>
+
+  <!-- ============== End Auth0 login markup ============ -->
+
+  <div v-if="AuthState.isAuthenticated" id="main">
     <div class="top-container">
       <transition name="button-fade">
         <button
@@ -44,15 +70,16 @@
         >To Google Sheets
       </a>
     </div>
-  </div>
 
-  <component :is="components[currentSheet]" :key="componentKey" />
+    <component :is="components[currentSheet]" :key="componentKey" />
+  </div>
 </template>
 
 <script setup>
 // This template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref, computed } from "vue";
+import { useAuth0, AuthState } from "./helperFunctions/useAuth0";
 import FormModalClassrooms from "./components/forms/form-modal-classrooms.vue";
 import FormModalChromebooks from "./components/forms/form-modal-chromebooks.vue";
 import DisplaySheetClassrooms from "./components/displaySS/display-sheet-classrooms.vue";
@@ -74,6 +101,12 @@ const forms = {
   FormModalChromebooks,
   FormModalClassrooms,
 };
+
+// ========  Auth0 initialization ============== //
+const { login, logout, initAuth } = useAuth0(AuthState);
+
+initAuth();
+// =========== end Auth0 init ================== //
 
 // =========== Computed Properties ========== //
 const displayedSheetName = computed(() => {
@@ -122,10 +155,17 @@ const switchSheet = () => {
   margin-top: 20px;
 }
 
+.login > h1 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  min-width: 400px;
+  margin: 0 auto;
+}
+
 img[alt="Scrap"] {
   border-radius: 50%;
   display: block;
-  margin: 0 auto 30px;
+  margin: 15px auto 30px;
 }
 
 .top-container {
@@ -247,4 +287,40 @@ img[alt="Scrap"] {
     background-position: 0 0;
   }
 }
+
+/* Login Button Stylings */
+.btn-login {
+  /* display: block; */
+  background: #41b883;
+  color: white;
+  padding: 8px 12px;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  border: none;
+  cursor: pointer;
+  min-width: 100px;
+  border-radius: 4px;
+  font-weight: bold;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+img[alt="Scrap logo"] {
+  margin: 0 auto;
+}
+
+.login {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 200px;
+  margin: 15px auto;
+}
+
+.logout {
+  margin-left: 5px;
+}
+
+/* End login button stylings */
 </style>
